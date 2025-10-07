@@ -49,7 +49,7 @@
 
 3. **Environment Variables**:
    ```
-   BOT_TOKEN=8462254072:AAGnmNqWVuCqkaBbvsC1kO4Mx5b9UjfKtTs
+   BOT_TOKEN=1832915778:AAEoEWEQLFkG43zhgZ6PfLQyrwci_20_7KE
    MONGODB_URI=mongodb+srv://...
    WEBAPP_URL=https://your-app.onrender.com
    NODE_ENV=production
@@ -77,7 +77,7 @@ docker-compose up -d
 ```bash
 docker build -t game2048 .
 docker run -p 3000:3000 \
-  -e BOT_TOKEN=8462254072:AAGnmNqWVuCqkaBbvsC1kO4Mx5b9UjfKtTs \
+  -e BOT_TOKEN=1832915778:AAEoEWEQLFkG43zhgZ6PfLQyrwci_20_7KE \
   -e MONGODB_URI=mongodb://host.docker.internal:27017/2048-game \
   -e WEBAPP_URL=http://localhost:3000 \
   game2048

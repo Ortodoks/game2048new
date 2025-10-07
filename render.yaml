@@ -8,13 +8,12 @@ services:
     startCommand: cd server && node server.js
     envVars:
       - key: BOT_TOKEN
-        value: 8462254072:AAGnmNqWVuCqkaBbvsC1kO4Mx5b9UjfKtTs
+        value: 1832915778:AAEoEWEQLFkG43zhgZ6PfLQyrwci_20_7KE
       - key: NODE_ENV
         value: production
       - key: PORT
         value: 10000
       - key: WEBAPP_URL
-        sync: false
       - key: MONGODB_URI
         sync: false
     autoDeploy: true

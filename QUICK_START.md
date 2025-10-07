@@ -22,7 +22,7 @@
 Создайте файл `server/.env`:
 
 ```env
-BOT_TOKEN=8462254072:AAGnmNqWVuCqkaBbvsC1kO4Mx5b9UjfKtTs
+BOT_TOKEN=1832915778:AAEoEWEQLFkG43zhgZ6PfLQyrwci_20_7KE
 WEBAPP_URL=http://localhost:3000
 MONGODB_URI=mongodb://localhost:27017/2048-game
 PORT=3000
@@ -163,7 +163,7 @@ npm run dev
    ```
 5. Добавьте переменные окружения:
    ```
-   BOT_TOKEN=8462254072:AAGnmNqWVuCqkaBbvsC1kO4Mx5b9UjfKtTs
+   BOT_TOKEN=1832915778:AAEoEWEQLFkG43zhgZ6PfLQyrwci_20_7KE
    MONGODB_URI=mongodb+srv://...  (MongoDB Atlas)
    WEBAPP_URL=https://your-app.onrender.com
    ```

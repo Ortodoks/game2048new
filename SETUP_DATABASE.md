@@ -76,7 +76,7 @@ GET    /api/health                 - Проверка состояния сер�
 
 ```env
 # Telegram Bot Token (получите у @BotFather)
-BOT_TOKEN=8462254072:AAGnmNqWVuCqkaBbvsC1kO4Mx5b9UjfKtTs
+BOT_TOKEN=1832915778:AAEoEWEQLFkG43zhgZ6PfLQyrwci_20_7KE
 
 # URL вашего веб-приложения
 WEBAPP_URL=http://localhost:3000
@@ -132,7 +132,7 @@ npm run start:full
 #### Шаг 1: Создайте файл `server/.env`
 
 ```env
-BOT_TOKEN=8462254072:AAGnmNqWVuCqkaBbvsC1kO4Mx5b9UjfKtTs
+BOT_TOKEN=1832915778:AAEoEWEQLFkG43zhgZ6PfLQyrwci_20_7KE
 WEBAPP_URL=http://localhost:3000
 PORT=3000
 ```

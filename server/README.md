@@ -4,7 +4,7 @@
 
 - Node.js 16+ 
 - MongoDB (локально или MongoDB Atlas)
-- Telegram Bot Token: `8462254072:AAGnmNqWVuCqkaBbvsC1kO4Mx5b9UjfKtTs`
+- Telegram Bot Token: `1832915778:AAEoEWEQLFkG43zhgZ6PfLQyrwci_20_7KE`
 
 ---
 
@@ -28,7 +28,7 @@ cp .env.example .env
 Отредактируйте `.env`:
 
 ```env
-BOT_TOKEN=8462254072:AAGnmNqWVuCqkaBbvsC1kO4Mx5b9UjfKtTs
+BOT_TOKEN=1832915778:AAEoEWEQLFkG43zhgZ6PfLQyrwci_20_7KE
 WEBAPP_URL=https://your-domain.com
 MONGODB_URI=mongodb://localhost:27017/2048-game
 PORT=3000
@@ -186,7 +186,7 @@ vercel
 
 ```bash
 heroku create your-app-name
-heroku config:set BOT_TOKEN=8462254072:AAGnmNqWVuCqkaBbvsC1kO4Mx5b9UjfKtTs
+heroku config:set BOT_TOKEN=1832915778:AAEoEWEQLFkG43zhgZ6PfLQyrwci_20_7KE
 heroku config:set MONGODB_URI=your-mongodb-uri
 git push heroku main
 ```
