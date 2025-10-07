@@ -6,7 +6,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - BOT_TOKEN=1832915778:AAEoEWEQLFkG43zhgZ6PfLQyrwci_20_7KE
+      - BOT_TOKEN=8462254072:AAGnmNqWVuCqkaBbvsC1kO4Mx5b9UjfKtTs
       - MONGODB_URI=mongodb://mongo:27017/2048-game
       - WEBAPP_URL=https://your-domain.com
       - PORT=3000

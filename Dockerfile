@@ -16,14 +16,11 @@ WORKDIR /app
 # Copy all frontend files to /app
 COPY index.html ./
 COPY styles.css ./
-COPY tab-styles.css ./
 COPY profile.html ./
 COPY shop.html ./
 COPY tasks.html ./
 COPY leaderboard.html ./
-COPY welcome.html ./
-COPY simple.html ./
-COPY test-toolbar.html ./
+COPY css/ ./css/
 COPY js/ ./js/
 
 # Copy server files
@@ -38,4 +35,4 @@ ENV PORT=10000
 
 # Start server from server directory
 WORKDIR /app/server
-CMD ["node", "server-simple.js"]
+CMD ["node", "server.js"]

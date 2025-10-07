@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: game2048-app
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: cd server && npm install
+    startCommand: cd server && node server.js
+    envVars:
+      - key: BOT_TOKEN
+        value: 8462254072:AAGnmNqWVuCqkaBbvsC1kO4Mx5b9UjfKtTs
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: WEBAPP_URL
+        sync: false
+      - key: MONGODB_URI
+        sync: false
+    autoDeploy: true
