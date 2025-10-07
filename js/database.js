@@ -405,6 +405,45 @@ class GameDatabase {
             return false;
         }
     }
+
+    async saveToGameDatabase(profile) {
+        if (!profile || !profile.telegramId) {
+            console.warn('No valid profile to save to server');
+            return false;
+        }
+
+        try {
+            // Определяем URL сервера
+            const API_URL = window.location.hostname === 'localhost' 
+                ? 'http://localhost:3000' 
+                : 'https://your-domain.com';
+
+            const response = await fetch(`${API_URL}/api/user/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    telegram_id: profile.telegramId,
+                    username: profile.username,
+                    first_name: profile.firstName,
+                    last_name: profile.lastName,
+                    photo_url: profile.photoUrl
+                })
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                console.log('✅ User registered on server:', result);
+                return true;
+            } else {
+                console.error('❌ Failed to register user on server:', response.statusText);
+                return false;
+            }
+        } catch (error) {
+            console.error('❌ Error registering user on server:', error);
+            return false;
+        }
+    }
+
 }
 
 // Initialize database

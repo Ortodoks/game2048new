@@ -171,13 +171,37 @@ app.post('/api/user/register', async (req, res) => {
 app.get('/api/user/:telegram_id', async (req, res) => {
     try {
         const telegram_id = parseInt(req.params.telegram_id);
-        const user = await db.collection('users').findOne({ telegram_id });
-        
-        if (!user) {
-            return res.status(404).json({ error: 'User not found' });
+
+        if (useDatabase && db) {
+            const user = await db.collection('users').findOne({ telegram_id });
+
+            if (user) {
+                res.json({ success: true, user });
+            } else {
+                // User not found in database, return basic info
+                res.json({
+                    success: true,
+                    user: {
+                        telegram_id: telegram_id,
+                        display_name: `user_${telegram_id}`,
+                        avatar: '👤',
+                        found: false
+                    }
+                });
+            }
+        } else {
+            // Database not available, return basic info
+            res.json({
+                success: true,
+                user: {
+                    telegram_id: telegram_id,
+                    display_name: `user_${telegram_id}`,
+                    avatar: '👤',
+                    found: false,
+                    storage: 'localStorage'
+                }
+            });
         }
-        
-        res.json({ success: true, user });
     } catch (error) {
         console.error('Error getting user:', error);
         res.status(500).json({ error: 'Internal server error' });

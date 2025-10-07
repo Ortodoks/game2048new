@@ -216,8 +216,11 @@ class TelegramIntegration {
         
         // Also save to game database if available
         if (window.gameDB && window.gameDB.isReady) {
-            this.saveToGameDatabase(profile);
+            window.gameDB.saveToGameDatabase(profile);
         }
+
+        // Also try to register on server directly (in case gameDB is not ready yet)
+        this.registerUserOnServer(profile);
         
         // Trigger avatar update in UI
         setTimeout(() => {
@@ -251,19 +254,92 @@ class TelegramIntegration {
         return '👤';
     }
     
-    getUserProfile() {
-        const saved = localStorage.getItem('telegram_user');
-        return saved ? JSON.parse(saved) : null;
+    async registerUserOnServer(profile) {
+        if (!profile || !profile.telegramId) {
+            console.warn('No valid profile to register on server');
+            return false;
+        }
+
+        try {
+            // Определяем URL сервера
+            const API_URL = window.location.hostname === 'localhost'
+                ? 'http://localhost:3000'
+                : 'https://your-domain.com';
+
+            const response = await fetch(`${API_URL}/api/user/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    telegram_id: profile.telegramId,
+                    username: profile.username,
+                    first_name: profile.firstName,
+                    last_name: profile.lastName,
+                    photo_url: profile.photoUrl
+                })
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                console.log('✅ User registered on server successfully:', result);
+
+                // Помечаем пользователя как зарегистрированного
+                localStorage.setItem('user_registered_on_server', 'true');
+                localStorage.setItem('user_registration_time', Date.now().toString());
+
+                return true;
+            } else {
+                console.error('❌ Failed to register user on server:', response.statusText);
+
+                // Если сервер недоступен, планируем повторную попытку позже
+                if (response.status >= 500) {
+                    this.scheduleRetryRegistration(profile);
+                }
+
+                return false;
+            }
+        } catch (error) {
+            console.error('❌ Error registering user on server:', error);
+
+            // Планируем повторную попытку при сетевых ошибках
+            this.scheduleRetryRegistration(profile);
+            return false;
+        }
+    }
+
+    scheduleRetryRegistration(profile) {
+        // Планируем повторную попытку регистрации через 30 секунд
+        setTimeout(() => {
+            console.log('🔄 Retrying user registration...');
+            this.registerUserOnServer(profile);
+        }, 30000);
+
+        // Также пытаемся при следующем взаимодействии с сервером
+        setTimeout(() => {
+            if (!localStorage.getItem('user_registered_on_server')) {
+                console.log('🔄 Retrying user registration on next server interaction...');
+                this.registerUserOnServer(profile);
+            }
+        }, 5000);
     }
     
     async uploadScore(score) {
         const profile = this.getUserProfile();
-        
+
         if (!profile) {
             console.error('No user profile found');
             return false;
         }
-        
+
+        // Проверяем, зарегистрирован ли пользователь на сервере
+        if (!localStorage.getItem('user_registered_on_server')) {
+            console.log('🔄 User not registered on server, attempting registration before score upload...');
+            const registered = await this.registerUserOnServer(profile);
+            if (!registered) {
+                console.warn('⚠️ Could not register user on server, score will be saved locally only');
+                // Продолжаем с локальным сохранением
+            }
+        }
+
         const data = {
             telegram_id: profile.telegramId,
             username: profile.displayName,
@@ -271,28 +347,28 @@ class TelegramIntegration {
             score: score,
             timestamp: Date.now()
         };
-        
+
         console.log('Uploading score to server:', data);
-        
+
         try {
             // Upload to backend API
-            const API_URL = window.location.hostname === 'localhost' 
-                ? 'http://localhost:3000' 
+            const API_URL = window.location.hostname === 'localhost'
+                ? 'http://localhost:3000'
                 : 'https://your-domain.com';
-            
+
             const response = await fetch(`${API_URL}/api/score`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
-            
+
             if (response.ok) {
                 const result = await response.json();
                 console.log('Score uploaded successfully:', result);
-                
+
                 // Also save locally as backup
                 this.saveScoreLocally(data);
-                
+
                 return result;
             } else {
                 console.error('Failed to upload score:', response.statusText);
