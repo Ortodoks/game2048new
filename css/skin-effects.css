@@ -1,0 +1,1114 @@
+/* ========================================
+   СИСТЕМА СКИНОВ - ВИЗУАЛЬНЫЕ СТИЛИ
+   ======================================== */
+
+/* === КЛАССИЧЕСКИЙ СКИН === */
+[data-skin="default"] {
+    --board-bg: rgba(187, 173, 160, 0.3);
+    --board-border: rgba(187, 173, 160, 0.8);
+    --tile-empty-bg: rgba(238, 228, 218, 0.35);
+}
+
+[data-skin="default"] #game-board {
+    background: var(--board-bg) !important;
+    border-color: var(--board-border) !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* === НЕОНОВЫЙ СКИН === */
+[data-skin="neon"] {
+    --board-bg: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+    --board-border: rgba(120, 219, 255, 0.8);
+    --tile-empty-bg: rgba(30, 30, 50, 0.6);
+}
+
+[data-skin="neon"] #game-board {
+    background: 
+        repeating-linear-gradient(
+            0deg,
+            rgba(120, 219, 255, 0.03) 0px,
+            transparent 1px,
+            transparent 40px,
+            rgba(120, 219, 255, 0.03) 41px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            rgba(120, 219, 255, 0.03) 0px,
+            transparent 1px,
+            transparent 40px,
+            rgba(120, 219, 255, 0.03) 41px
+        ),
+        linear-gradient(135deg, #0a0a15 0%, #1a1a2e 50%, #0f0f23 100%) !important;
+    border: 2px solid var(--board-border) !important;
+    box-shadow: 0 0 40px rgba(120, 219, 255, 0.6),
+                0 0 80px rgba(120, 219, 255, 0.3),
+                inset 0 0 100px rgba(120, 219, 255, 0.05),
+                0 20px 60px rgba(0, 0, 0, 0.5) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+[data-skin="neon"] #game-board::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: 
+        radial-gradient(circle at 30% 30%, rgba(120, 219, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 70% 70%, rgba(255, 119, 198, 0.1) 0%, transparent 50%);
+    animation: neon-glow-move 15s linear infinite;
+    pointer-events: none;
+}
+
+[data-skin="neon"] #game-board::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 100px,
+            rgba(120, 219, 255, 0.02) 100px,
+            rgba(120, 219, 255, 0.02) 101px
+        );
+    pointer-events: none;
+    animation: neon-pulse 3s ease-in-out infinite;
+}
+
+@keyframes neon-glow-move {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    100% { transform: translate(10%, 10%) rotate(360deg); }
+}
+
+@keyframes neon-pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+[data-skin="neon"] .tile:empty,
+[data-skin="neon"] .tile.tile-0 {
+    background: var(--tile-empty-bg) !important;
+    border: 1px solid rgba(120, 219, 255, 0.3) !important;
+}
+
+/* Стилизация плиток неонового скина */
+[data-skin="neon"] .tile:not(.tile-0) {
+    background: linear-gradient(135deg, rgba(120, 219, 255, 0.2), rgba(255, 119, 198, 0.2)) !important;
+    border: 2px solid rgba(120, 219, 255, 0.6) !important;
+    box-shadow: 0 0 15px rgba(120, 219, 255, 0.4),
+                inset 0 0 20px rgba(120, 219, 255, 0.1) !important;
+    text-shadow: 0 0 10px rgba(120, 219, 255, 0.8),
+                 0 0 20px rgba(255, 119, 198, 0.6);
+}
+
+/* === ЗОЛОТОЙ СКИН === */
+[data-skin="gold"] {
+    --board-bg: linear-gradient(135deg, #3d2814 0%, #5c4523 100%);
+    --board-border: rgba(218, 165, 32, 0.9);
+    --tile-empty-bg: rgba(139, 69, 19, 0.5);
+}
+
+[data-skin="gold"] #game-board {
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(255, 215, 0, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(218, 165, 32, 0.15) 0%, transparent 50%),
+        repeating-linear-gradient(
+            45deg,
+            #3d2814 0px,
+            #4a3419 2px,
+            #5c4523 4px,
+            #4a3419 6px,
+            #3d2814 8px
+        ),
+        linear-gradient(135deg, #2d1f0f 0%, #5c4523 50%, #3d2814 100%) !important;
+    border: 3px solid var(--board-border) !important;
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.5),
+                0 0 60px rgba(218, 165, 32, 0.3),
+                inset 0 0 80px rgba(255, 215, 0, 0.15),
+                0 20px 60px rgba(0, 0, 0, 0.5) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+[data-skin="gold"] #game-board::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: 
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 20px,
+            rgba(255, 215, 0, 0.1) 20px,
+            rgba(255, 215, 0, 0.1) 40px
+        );
+    animation: gold-pattern-move 20s linear infinite;
+    pointer-events: none;
+}
+
+[data-skin="gold"] #game-board::after {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    background: linear-gradient(45deg, 
+        transparent 30%, 
+        rgba(255, 215, 0, 0.3) 50%, 
+        transparent 70%);
+    background-size: 200% 200%;
+    border-radius: inherit;
+    animation: gold-shimmer 4s linear infinite;
+    pointer-events: none;
+    z-index: 1;
+}
+
+@keyframes gold-pattern-move {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50%, 50%); }
+}
+
+@keyframes gold-shimmer {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+}
+
+[data-skin="gold"] .tile:empty,
+[data-skin="gold"] .tile.tile-0 {
+    background: var(--tile-empty-bg) !important;
+    border: 1px solid rgba(218, 165, 32, 0.5) !important;
+}
+
+/* Золотые плитки */
+[data-skin="gold"] .tile:not(.tile-0) {
+    background: linear-gradient(135deg, rgba(218, 165, 32, 0.3), rgba(255, 215, 0, 0.2)) !important;
+    border: 2px solid rgba(218, 165, 32, 0.7) !important;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4),
+                inset 0 0 20px rgba(255, 215, 0, 0.1) !important;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+}
+
+/* === КОСМИЧЕСКИЙ СКИН === */
+[data-skin="space"] {
+    --board-bg: linear-gradient(135deg, #000428 0%, #004e92 100%);
+    --board-border: rgba(138, 43, 226, 0.8);
+    --tile-empty-bg: rgba(10, 10, 30, 0.7);
+}
+
+[data-skin="space"] #game-board {
+    background: 
+        radial-gradient(2px 2px at 20% 30%, white, transparent),
+        radial-gradient(2px 2px at 60% 70%, white, transparent),
+        radial-gradient(1px 1px at 50% 50%, white, transparent),
+        radial-gradient(1px 1px at 80% 10%, white, transparent),
+        radial-gradient(2px 2px at 90% 60%, white, transparent),
+        radial-gradient(1px 1px at 33% 70%, white, transparent),
+        radial-gradient(1px 1px at 15% 85%, white, transparent),
+        radial-gradient(circle at 50% 50%, rgba(138, 43, 226, 0.3) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(75, 0, 130, 0.4) 0%, transparent 50%),
+        radial-gradient(ellipse at 20% 80%, rgba(100, 20, 180, 0.3) 0%, transparent 50%),
+        linear-gradient(135deg, #000428 0%, #001540 25%, #002855 50%, #004e92 100%) !important;
+    background-size: 200% 200%, 200% 200%, 200% 200%, 200% 200%, 200% 200%, 200% 200%, 200% 200%, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+    border: 2px solid var(--board-border) !important;
+    box-shadow: 0 0 50px rgba(138, 43, 226, 0.7),
+                0 0 100px rgba(138, 43, 226, 0.4),
+                inset 0 0 100px rgba(138, 43, 226, 0.2),
+                0 20px 60px rgba(0, 0, 0, 0.6) !important;
+    position: relative;
+    overflow: hidden;
+    animation: space-stars-twinkle 4s ease-in-out infinite;
+}
+
+@keyframes space-stars-twinkle {
+    0%, 100% { background-position: 0% 0%, 100% 100%, 50% 50%, 80% 10%, 90% 60%, 33% 70%, 15% 85%, 50% 50%, 80% 20%, 20% 80%, 0% 0%; }
+    50% { background-position: 5% 5%, 95% 95%, 55% 55%, 85% 15%, 85% 65%, 38% 75%, 20% 80%, 50% 50%, 80% 20%, 20% 80%, 0% 0%; }
+}
+
+[data-skin="space"] #game-board::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 30% 40%, rgba(138, 43, 226, 0.1) 0%, transparent 30%);
+    animation: space-nebula 10s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+@keyframes space-stars {
+    from { background-position: 0 0; }
+    to { background-position: 100% 100%; }
+}
+
+@keyframes space-nebula {
+    0% { transform: scale(1) rotate(0deg); opacity: 0.3; }
+    100% { transform: scale(1.2) rotate(10deg); opacity: 0.6; }
+}
+
+[data-skin="space"] .tile:empty,
+[data-skin="space"] .tile.tile-0 {
+    background: var(--tile-empty-bg) !important;
+    border: 1px solid rgba(138, 43, 226, 0.4) !important;
+}
+
+/* Космические плитки */
+[data-skin="space"] .tile:not(.tile-0) {
+    background: linear-gradient(135deg, rgba(138, 43, 226, 0.3), rgba(75, 0, 130, 0.2)) !important;
+    border: 2px solid rgba(138, 43, 226, 0.6) !important;
+    box-shadow: 0 0 20px rgba(138, 43, 226, 0.5),
+                inset 0 0 25px rgba(138, 43, 226, 0.1) !important;
+    text-shadow: 0 0 10px rgba(138, 43, 226, 0.8);
+}
+
+/* === ПРИРОДНЫЙ СКИН === */
+[data-skin="nature"] {
+    --board-bg: linear-gradient(135deg, #1a3a1a 0%, #2d5a2d 100%);
+    --board-border: rgba(76, 175, 80, 0.8);
+    --tile-empty-bg: rgba(46, 125, 50, 0.4);
+}
+
+[data-skin="nature"] #game-board {
+    background: 
+        repeating-linear-gradient(
+            90deg,
+            rgba(76, 175, 80, 0.03),
+            rgba(76, 175, 80, 0.03) 10px,
+            transparent 10px,
+            transparent 20px
+        ),
+        repeating-linear-gradient(
+            0deg,
+            rgba(139, 195, 74, 0.03),
+            rgba(139, 195, 74, 0.03) 10px,
+            transparent 10px,
+            transparent 20px
+        ),
+        radial-gradient(ellipse at 30% 20%, rgba(76, 175, 80, 0.2) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 80%, rgba(139, 195, 74, 0.2) 0%, transparent 50%),
+        linear-gradient(135deg, #1a3a1a 0%, #2d5a2d 50%, #1f4a1f 100%) !important;
+    border: 2px solid var(--board-border) !important;
+    box-shadow: 0 0 30px rgba(76, 175, 80, 0.5),
+                0 0 60px rgba(46, 125, 50, 0.3),
+                inset 0 0 80px rgba(76, 175, 80, 0.1),
+                0 20px 60px rgba(0, 0, 0, 0.5) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+[data-skin="nature"] #game-board::before {
+    content: '🍃';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 2rem;
+    opacity: 0.3;
+    animation: nature-float 4s ease-in-out infinite;
+    pointer-events: none;
+}
+
+[data-skin="nature"] #game-board::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 10% 90%, rgba(76, 175, 80, 0.1) 0%, transparent 30%),
+        radial-gradient(circle at 90% 10%, rgba(139, 195, 74, 0.1) 0%, transparent 30%);
+    animation: nature-glow 8s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+@keyframes nature-glow {
+    0% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+@keyframes nature-float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(5deg); }
+}
+
+[data-skin="nature"] .tile:empty,
+[data-skin="nature"] .tile.tile-0 {
+    background: var(--tile-empty-bg) !important;
+    border: 1px solid rgba(76, 175, 80, 0.5) !important;
+}
+
+/* Природные плитки */
+[data-skin="nature"] .tile:not(.tile-0) {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.3), rgba(46, 125, 50, 0.2)) !important;
+    border: 2px solid rgba(76, 175, 80, 0.6) !important;
+    box-shadow: 0 0 15px rgba(76, 175, 80, 0.4),
+                inset 0 0 20px rgba(76, 175, 80, 0.1) !important;
+    text-shadow: 0 0 8px rgba(76, 175, 80, 0.7);
+}
+
+/* === ОГНЕННЫЙ СКИН === */
+[data-skin="fire"] {
+    --board-bg: linear-gradient(135deg, #2d0a00 0%, #4a0e00 100%);
+    --board-border: rgba(255, 69, 0, 0.9);
+    --tile-empty-bg: rgba(139, 0, 0, 0.5);
+}
+
+[data-skin="fire"] #game-board {
+    background: 
+        radial-gradient(ellipse at 20% 100%, rgba(255, 69, 0, 0.4) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 100%, rgba(255, 140, 0, 0.3) 0%, transparent 40%),
+        radial-gradient(ellipse at 80% 100%, rgba(255, 69, 0, 0.4) 0%, transparent 50%),
+        repeating-linear-gradient(
+            90deg,
+            rgba(255, 69, 0, 0.05),
+            rgba(255, 69, 0, 0.05) 20px,
+            rgba(255, 140, 0, 0.05) 20px,
+            rgba(255, 140, 0, 0.05) 40px
+        ),
+        linear-gradient(180deg, #2d0a00 0%, #4a0e00 50%, #5a1000 100%) !important;
+    border: 2px solid var(--board-border) !important;
+    box-shadow: 0 0 40px rgba(255, 69, 0, 0.8),
+                0 0 80px rgba(255, 69, 0, 0.4),
+                inset 0 0 60px rgba(255, 69, 0, 0.15),
+                0 20px 60px rgba(0, 0, 0, 0.6) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+[data-skin="fire"] #game-board::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40%;
+    background: linear-gradient(0deg, 
+        rgba(255, 69, 0, 0.3) 0%,
+        rgba(255, 140, 0, 0.2) 50%,
+        transparent 100%);
+    animation: fire-waves 3s ease-in-out infinite;
+    pointer-events: none;
+}
+
+[data-skin="fire"] #game-board::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 30% 80%, rgba(255, 69, 0, 0.2) 0%, transparent 30%),
+        radial-gradient(circle at 70% 70%, rgba(255, 140, 0, 0.2) 0%, transparent 30%);
+    animation: fire-flicker 2s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes fire-waves {
+    0%, 100% { transform: translateY(0) scaleY(1); }
+    50% { transform: translateY(-10px) scaleY(1.1); }
+}
+
+@keyframes fire-flicker {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+}
+
+[data-skin="fire"] .tile:empty,
+[data-skin="fire"] .tile.tile-0 {
+    background: var(--tile-empty-bg) !important;
+    border: 1px solid rgba(255, 69, 0, 0.5) !important;
+}
+
+/* Огненные плитки */
+[data-skin="fire"] .tile:not(.tile-0) {
+    background: linear-gradient(135deg, rgba(255, 69, 0, 0.3), rgba(255, 0, 0, 0.2)) !important;
+    border: 2px solid rgba(255, 69, 0, 0.7) !important;
+    box-shadow: 0 0 20px rgba(255, 69, 0, 0.5),
+                inset 0 0 25px rgba(255, 69, 0, 0.1) !important;
+    text-shadow: 0 0 10px rgba(255, 69, 0, 0.8),
+                 0 0 15px rgba(255, 140, 0, 0.6);
+}
+
+/* === ЛЕДЯНОЙ СКИН - ПОЛНАЯ РЕАЛИЗАЦИЯ === */
+[data-skin="ice"] {
+    --board-bg: linear-gradient(135deg, #dff6ff 0%, #a3d8f4 100%);
+    --board-border: rgba(255, 255, 255, 0.8);
+    --tile-empty-bg: rgba(163, 216, 244, 0.3);
+    --ice-base: #a3d8f4;
+    --ice-light: #e0f7ff;
+    --ice-mid: #b0d0e0;
+    --ice-glow: rgba(163, 216, 244, 0.8);
+}
+
+/* ЛЕДЯНОЕ ПОЛЕ */
+[data-skin="ice"] #game-board {
+    background: 
+        /* Ледяная текстура (кристаллы) */
+        repeating-linear-gradient(
+            30deg,
+            transparent,
+            transparent 2px,
+            rgba(255, 255, 255, 0.15) 2px,
+            rgba(255, 255, 255, 0.15) 4px
+        ),
+        repeating-linear-gradient(
+            -30deg,
+            transparent,
+            transparent 2px,
+            rgba(255, 255, 255, 0.1) 2px,
+            rgba(255, 255, 255, 0.1) 4px
+        ),
+        /* Морозные пятна */
+        radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.4) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.3) 0%, transparent 35%),
+        radial-gradient(circle at 50% 50%, rgba(224, 247, 255, 0.4) 0%, transparent 50%),
+        /* Базовый холодный градиент */
+        linear-gradient(135deg, #dff6ff 0%, #b8e3f5 50%, #a3d8f4 100%) !important;
+    border: 3px solid var(--board-border) !important;
+    box-shadow: 
+        /* Ледяное свечение */
+        0 0 60px rgba(163, 216, 244, 0.8),
+        0 0 100px rgba(224, 247, 255, 0.5),
+        /* Внутреннее свечение */
+        inset 0 0 100px rgba(255, 255, 255, 0.3),
+        inset 0 0 50px rgba(163, 216, 244, 0.2),
+        /* Тень */
+        0 20px 60px rgba(0, 0, 0, 0.3) !important;
+    position: relative;
+    overflow: hidden;
+    animation: frost-breath 4s ease-in-out infinite;
+}
+
+/* Морозное дыхание (frost breath) */
+@keyframes frost-breath {
+    0%, 100% { 
+        box-shadow: 
+            0 0 60px rgba(163, 216, 244, 0.6),
+            0 0 100px rgba(224, 247, 255, 0.4),
+            inset 0 0 100px rgba(255, 255, 255, 0.2),
+            inset 0 0 50px rgba(163, 216, 244, 0.15),
+            0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+    50% { 
+        box-shadow: 
+            0 0 80px rgba(163, 216, 244, 0.9),
+            0 0 120px rgba(224, 247, 255, 0.6),
+            inset 0 0 120px rgba(255, 255, 255, 0.4),
+            inset 0 0 70px rgba(163, 216, 244, 0.25),
+            0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+}
+
+/* Ледяные кристаллы (overlay) */
+[data-skin="ice"] #game-board::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        /* Большие кристаллы */
+        linear-gradient(30deg, transparent 48%, rgba(255, 255, 255, 0.4) 49%, rgba(255, 255, 255, 0.4) 51%, transparent 52%),
+        linear-gradient(150deg, transparent 48%, rgba(255, 255, 255, 0.4) 49%, rgba(255, 255, 255, 0.4) 51%, transparent 52%),
+        /* Мелкие кристаллы */
+        linear-gradient(60deg, transparent 49%, rgba(255, 255, 255, 0.2) 50%, transparent 51%),
+        linear-gradient(120deg, transparent 49%, rgba(255, 255, 255, 0.2) 50%, transparent 51%);
+    background-size: 100px 100px, 100px 100px, 50px 50px, 50px 50px;
+    animation: ice-crystals-move 25s linear infinite;
+    pointer-events: none;
+    opacity: 0.3;
+}
+
+@keyframes ice-crystals-move {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50px, 50px); }
+}
+
+[data-skin="ice"] #game-board::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg,
+        transparent 0%,
+        rgba(135, 206, 250, 0.1) 25%,
+        rgba(255, 255, 255, 0.2) 50%,
+        rgba(135, 206, 250, 0.1) 75%,
+        transparent 100%);
+    background-size: 200% 200%;
+    animation: ice-shine 3s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes ice-crystals {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50px, 50px); }
+}
+
+@keyframes ice-shine {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+[data-skin="ice"] .tile:empty,
+[data-skin="ice"] .tile.tile-0 {
+    background: var(--tile-empty-bg) !important;
+    border: 1px solid rgba(135, 206, 250, 0.5) !important;
+}
+
+/* === ЛЕДЯНЫЕ ПЛИТКИ - ПОЛНАЯ РЕАЛИЗАЦИЯ === */
+[data-skin="ice"] .tile:not(.tile-0) {
+    position: relative;
+    /* Вертикальный градиент #e0f7ff → #b0d0e0 */
+    background: 
+        linear-gradient(180deg, 
+            #e0f7ff 0%, 
+            #c8ecf8 30%,
+            #b0d0e0 70%,
+            #a3d8f4 100%) !important;
+    background-size: 100% 200%;
+    /* Белая обводка с свечением */
+    border: 2px solid #ffffff !important;
+    box-shadow: 
+        /* Внешнее ледяное свечение */
+        0 0 20px rgba(163, 216, 244, 0.8),
+        0 0 40px rgba(224, 247, 255, 0.5),
+        0 4px 15px rgba(0, 0, 0, 0.2),
+        /* Внутреннее свечение (glow) */
+        inset 0 0 40px rgba(255, 255, 255, 0.4),
+        inset 0 0 20px rgba(163, 216, 244, 0.3),
+        /* 3D эффект */
+        inset -2px -2px 10px rgba(255, 255, 255, 0.6),
+        inset 2px 2px 10px rgba(163, 216, 244, 0.3) !important;
+    /* Морозный шрифт */
+    text-shadow: 
+        0 0 10px rgba(255, 255, 255, 1),
+        0 0 20px rgba(163, 216, 244, 0.8),
+        0 2px 4px rgba(0, 0, 0, 0.3),
+        0 -1px 1px rgba(255, 255, 255, 0.6);
+    color: #2b5f7f !important;
+    font-weight: 900 !important;
+    letter-spacing: 1px;
+    /* Shimmer анимация */
+    animation: ice-tile-shimmer 3s ease-in-out infinite;
+    backdrop-filter: blur(1px);
+}
+
+/* Ледяной блеск на плитках */
+[data-skin="ice"] .tile:not(.tile-0)::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        45deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.6) 50%,
+        transparent 70%
+    );
+    background-size: 200% 200%;
+    animation: ice-gleam 4s linear infinite;
+    pointer-events: none;
+    border-radius: inherit;
+}
+
+/* Ледяные кристаллы на плитках */
+[data-skin="ice"] .tile:not(.tile-0)::after {
+    content: '';
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    right: 5%;
+    bottom: 5%;
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.4) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.3) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.2) 0%, transparent 60%);
+    animation: ice-sparkle 2s ease-in-out infinite;
+    pointer-events: none;
+    border-radius: inherit;
+}
+
+/* === АНИМАЦИЯ SHIMMER (Перелив по грани плитки) === */
+@keyframes ice-tile-shimmer {
+    0%, 100% { 
+        background-position: 0% 0%;
+        box-shadow: 
+            0 0 20px rgba(163, 216, 244, 0.7),
+            0 0 40px rgba(224, 247, 255, 0.4),
+            0 4px 15px rgba(0, 0, 0, 0.2),
+            inset 0 0 40px rgba(255, 255, 255, 0.3),
+            inset 0 0 20px rgba(163, 216, 244, 0.25),
+            inset -2px -2px 10px rgba(255, 255, 255, 0.5),
+            inset 2px 2px 10px rgba(163, 216, 244, 0.3);
+    }
+    50% { 
+        background-position: 0% 100%;
+        box-shadow: 
+            0 0 30px rgba(163, 216, 244, 0.9),
+            0 0 50px rgba(224, 247, 255, 0.6),
+            0 4px 15px rgba(0, 0, 0, 0.2),
+            inset 0 0 50px rgba(255, 255, 255, 0.5),
+            inset 0 0 30px rgba(163, 216, 244, 0.4),
+            inset -3px -3px 12px rgba(255, 255, 255, 0.7),
+            inset 3px 3px 12px rgba(163, 216, 244, 0.4);
+    }
+}
+
+/* Анимация блеска */
+@keyframes ice-gleam {
+    0% { 
+        background-position: -200% -200%;
+        opacity: 0.3;
+    }
+    50% {
+        opacity: 0.6;
+    }
+    100% { 
+        background-position: 200% 200%;
+        opacity: 0.3;
+    }
+}
+
+/* Анимация кристаллов */
+@keyframes ice-sparkle {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
+}
+
+/* === РАДУЖНЫЙ СКИН === */
+[data-skin="rainbow"] {
+    --board-bg: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    --board-border: rgba(255, 255, 255, 0.8);
+    --tile-empty-bg: rgba(255, 255, 255, 0.15);
+}
+
+[data-skin="rainbow"] #game-board {
+    background: 
+        repeating-linear-gradient(
+            90deg,
+            rgba(255, 0, 0, 0.1) 0%,
+            rgba(255, 127, 0, 0.1) 14%,
+            rgba(255, 255, 0, 0.1) 28%,
+            rgba(0, 255, 0, 0.1) 42%,
+            rgba(0, 0, 255, 0.1) 57%,
+            rgba(75, 0, 130, 0.1) 71%,
+            rgba(148, 0, 211, 0.1) 85%,
+            rgba(255, 0, 0, 0.1) 100%
+        ),
+        radial-gradient(circle at 30% 30%, rgba(255, 0, 255, 0.2) 0%, transparent 50%),
+        radial-gradient(circle at 70% 70%, rgba(0, 255, 255, 0.2) 0%, transparent 50%),
+        linear-gradient(135deg, 
+            #667eea 0%, 
+            #764ba2 25%, 
+            #f093fb 50%, 
+            #667eea 75%,
+            #764ba2 100%) !important;
+    border: 2px solid var(--board-border) !important;
+    box-shadow: 0 0 50px rgba(255, 255, 255, 0.7),
+                0 0 100px rgba(255, 255, 255, 0.4),
+                inset 0 0 100px rgba(255, 255, 255, 0.1),
+                0 20px 60px rgba(0, 0, 0, 0.5) !important;
+    position: relative;
+    overflow: hidden;
+    background-size: 200% 200%, 100% 100%, 100% 100%, 200% 200%;
+    animation: rainbow-shift 8s ease infinite;
+}
+
+@keyframes rainbow-shift {
+    0%, 100% { background-position: 0% 50%, 30% 30%, 70% 70%, 0% 50%; }
+    50% { background-position: 100% 50%, 35% 35%, 65% 65%, 100% 50%; }
+}
+
+[data-skin="rainbow"] #game-board::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 30px,
+            rgba(255, 255, 255, 0.05) 30px,
+            rgba(255, 255, 255, 0.05) 60px
+        );
+    pointer-events: none;
+}
+
+[data-skin="rainbow"] #game-board::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg,
+        rgba(255, 0, 0, 0.15) 0%,
+        rgba(255, 127, 0, 0.15) 14%,
+        rgba(255, 255, 0, 0.15) 28%,
+        rgba(0, 255, 0, 0.15) 42%,
+        rgba(0, 0, 255, 0.15) 57%,
+        rgba(75, 0, 130, 0.15) 71%,
+        rgba(148, 0, 211, 0.15) 85%,
+        rgba(255, 0, 0, 0.15) 100%);
+    background-size: 400% 400%;
+    animation: rainbow-wave 15s linear infinite;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+@keyframes rainbow-wave {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 400% 50%; }
+}
+
+@keyframes rainbow-move {
+    from { background-position: 0% 0%; }
+    to { background-position: 200% 200%; }
+}
+
+[data-skin="rainbow"] .tile:empty,
+[data-skin="rainbow"] .tile.tile-0 {
+    background: var(--tile-empty-bg) !important;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Радужные плитки */
+[data-skin="rainbow"] .tile:not(.tile-0) {
+    background: linear-gradient(135deg, 
+        rgba(255, 0, 0, 0.2) 0%,
+        rgba(255, 127, 0, 0.2) 16%,
+        rgba(255, 255, 0, 0.2) 33%,
+        rgba(0, 255, 0, 0.2) 50%,
+        rgba(0, 0, 255, 0.2) 66%,
+        rgba(75, 0, 130, 0.2) 83%,
+        rgba(148, 0, 211, 0.2) 100%) !important;
+    border: 2px solid rgba(255, 255, 255, 0.7) !important;
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.6),
+                inset 0 0 30px rgba(255, 255, 255, 0.1) !important;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 1),
+                 0 0 20px rgba(255, 0, 255, 0.6),
+                 0 0 30px rgba(0, 255, 255, 0.4);
+    animation: rainbow-tile-shift 3s ease infinite;
+}
+
+@keyframes rainbow-tile-shift {
+    0%, 100% { filter: hue-rotate(0deg); }
+    50% { filter: hue-rotate(30deg); }
+}
+
+/* ========================================
+   АНИМАЦИИ ПЛИТОК
+   ======================================== */
+
+/* Анимация появления новой плитки */
+@keyframes tile-appear {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.tile.new-tile {
+    animation: tile-appear 0.3s ease-out;
+}
+
+/* Эффект слияния - Неоновый скин */
+@keyframes neon-flash {
+    0% {
+        box-shadow: 0 0 10px rgba(120, 219, 255, 0.8);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(120, 219, 255, 1), 0 0 50px rgba(255, 119, 198, 0.8);
+        transform: scale(1.1);
+    }
+    100% {
+        box-shadow: 0 0 10px rgba(120, 219, 255, 0.6);
+        transform: scale(1);
+    }
+}
+
+[data-skin="neon"] .tile.merged {
+    animation: neon-flash 0.4s ease-out;
+}
+
+/* Эффект слияния - Золотой скин */
+@keyframes gold-shine {
+    0% {
+        box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+    }
+    25% {
+        box-shadow: 0 0 20px rgba(255, 215, 0, 1), 0 0 40px rgba(218, 165, 32, 0.8);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(255, 215, 0, 1), 0 0 60px rgba(218, 165, 32, 1);
+        transform: rotate(5deg) scale(1.15);
+    }
+    75% {
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+        transform: rotate(-5deg) scale(1.1);
+    }
+    100% {
+        box-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+        transform: rotate(0deg) scale(1);
+    }
+}
+
+[data-skin="gold"] .tile.merged {
+    animation: gold-shine 0.5s ease-out;
+}
+
+/* Эффект слияния - Космический скин */
+@keyframes star-burst {
+    0% {
+        box-shadow: 0 0 10px rgba(138, 43, 226, 0.6);
+    }
+    20% {
+        box-shadow: 0 0 30px rgba(138, 43, 226, 1), 0 0 60px rgba(138, 43, 226, 0.8);
+    }
+    40% {
+        box-shadow: 0 0 50px rgba(138, 43, 226, 1), 0 0 80px rgba(75, 0, 130, 1);
+        transform: scale(1.2);
+    }
+    100% {
+        box-shadow: 0 0 15px rgba(138, 43, 226, 0.7);
+        transform: scale(1);
+    }
+}
+
+[data-skin="space"] .tile.merged {
+    animation: star-burst 0.5s ease-out;
+}
+
+/* Эффект слияния - Природный скин */
+@keyframes leaf-scatter {
+    0% {
+        box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+    }
+    25% {
+        box-shadow: 0 0 15px rgba(76, 175, 80, 1);
+        transform: translateY(-5px);
+    }
+    50% {
+        box-shadow: 0 0 25px rgba(76, 175, 80, 1), 0 0 40px rgba(46, 125, 50, 0.8);
+        transform: translateY(-10px) rotate(10deg);
+    }
+    75% {
+        box-shadow: 0 0 15px rgba(76, 175, 80, 0.8);
+        transform: translateY(-5px) rotate(-5deg);
+    }
+    100% {
+        box-shadow: 0 0 5px rgba(76, 175, 80, 0.6);
+        transform: translateY(0) rotate(0deg);
+    }
+}
+
+[data-skin="nature"] .tile.merged {
+    animation: leaf-scatter 0.5s ease-out;
+}
+
+/* Эффект слияния - Огненный скин */
+@keyframes fire-explosion {
+    0% {
+        box-shadow: 0 0 10px rgba(255, 69, 0, 0.6);
+    }
+    25% {
+        box-shadow: 0 0 30px rgba(255, 69, 0, 1), 0 0 50px rgba(255, 0, 0, 0.8);
+        transform: scale(1.15);
+    }
+    50% {
+        box-shadow: 0 0 50px rgba(255, 69, 0, 1), 0 0 80px rgba(255, 140, 0, 1);
+        transform: scale(1.2);
+    }
+    75% {
+        box-shadow: 0 0 30px rgba(255, 69, 0, 0.8);
+        transform: scale(1.1);
+    }
+    100% {
+        box-shadow: 0 0 15px rgba(255, 69, 0, 0.7);
+        transform: scale(1);
+    }
+}
+
+[data-skin="fire"] .tile.merged {
+    animation: fire-explosion 0.5s ease-out;
+}
+
+/* Эффект слияния - Ледяной скин */
+@keyframes ice-shatter {
+    0% {
+        box-shadow: 0 0 10px rgba(135, 206, 250, 0.6);
+    }
+    20% {
+        box-shadow: 0 0 20px rgba(135, 206, 250, 1), 0 0 40px rgba(70, 130, 180, 0.8);
+        transform: scale(1.1);
+    }
+    40% {
+        box-shadow: 0 0 30px rgba(135, 206, 250, 1), 0 0 60px rgba(0, 191, 255, 1);
+        transform: scale(1.15) rotate(2deg);
+    }
+    60% {
+        box-shadow: 0 0 25px rgba(135, 206, 250, 0.9);
+        transform: scale(1.1) rotate(-2deg);
+    }
+    80% {
+        box-shadow: 0 0 15px rgba(135, 206, 250, 0.7);
+        transform: scale(1.05) rotate(1deg);
+    }
+    100% {
+        box-shadow: 0 0 10px rgba(135, 206, 250, 0.6);
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+/* === ЭФФЕКТ ЛЕДЯНОЙ ТРЕЩИНЫ ПРИ СЛИЯНИИ (ice_crack) === */
+[data-skin="ice"] .tile.merged {
+    animation: ice-crack 0.5s ease-out;
+}
+
+@keyframes ice-crack {
+    0% {
+        transform: scale(1);
+        box-shadow: 
+            0 0 20px rgba(163, 216, 244, 0.8),
+            0 0 40px rgba(224, 247, 255, 0.5),
+            inset 0 0 40px rgba(255, 255, 255, 0.4);
+    }
+    30% {
+        transform: scale(1.15);
+        box-shadow: 
+            0 0 60px rgba(163, 216, 244, 1),
+            0 0 100px rgba(255, 255, 255, 0.8),
+            inset 0 0 80px rgba(255, 255, 255, 0.7);
+        filter: brightness(1.5);
+    }
+    60% {
+        transform: scale(0.95);
+        box-shadow: 
+            0 0 40px rgba(163, 216, 244, 0.9),
+            0 0 70px rgba(224, 247, 255, 0.6),
+            inset 0 0 50px rgba(255, 255, 255, 0.5);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 
+            0 0 20px rgba(163, 216, 244, 0.8),
+            0 0 40px rgba(224, 247, 255, 0.5),
+            inset 0 0 40px rgba(255, 255, 255, 0.4);
+        filter: brightness(1);
+    }
+}
+
+/* Эффект слияния - Радужный скин */
+@keyframes rainbow-burst {
+    0% {
+        box-shadow: 0 0 10px rgba(255, 0, 0, 0.6);
+    }
+    14% {
+        box-shadow: 0 0 20px rgba(255, 127, 0, 1);
+    }
+    28% {
+        box-shadow: 0 0 25px rgba(255, 255, 0, 1);
+        transform: scale(1.1) rotate(5deg);
+    }
+    42% {
+        box-shadow: 0 0 30px rgba(0, 255, 0, 1);
+        transform: scale(1.15) rotate(-5deg);
+    }
+    56% {
+        box-shadow: 0 0 25px rgba(0, 0, 255, 1);
+        transform: scale(1.1) rotate(3deg);
+    }
+    70% {
+        box-shadow: 0 0 20px rgba(75, 0, 130, 1);
+        transform: scale(1.05) rotate(-3deg);
+    }
+    85% {
+        box-shadow: 0 0 15px rgba(148, 0, 211, 0.8);
+        transform: scale(1.02) rotate(1deg);
+    }
+    100% {
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+[data-skin="rainbow"] .tile.merged {
+    animation: rainbow-burst 0.7s ease-out;
+}
+
+/* Анимация при использовании бустера для разных скинов */
+[data-skin="neon"] #game-board.bomb-mode .tile:hover {
+    box-shadow: 0 0 30px rgba(120, 219, 255, 1);
+}
+
+[data-skin="gold"] #game-board.bomb-mode .tile:hover {
+    box-shadow: 0 0 30px rgba(255, 215, 0, 1);
+}
+
+[data-skin="space"] #game-board.bomb-mode .tile:hover {
+    box-shadow: 0 0 30px rgba(138, 43, 226, 1);
+}
+
+[data-skin="nature"] #game-board.bomb-mode .tile:hover {
+    box-shadow: 0 0 30px rgba(76, 175, 80, 1);
+}
+
+[data-skin="fire"] #game-board.bomb-mode .tile:hover {
+    box-shadow: 0 0 30px rgba(255, 69, 0, 1);
+}
+
+[data-skin="ice"] #game-board.bomb-mode .tile:hover {
+    box-shadow: 0 0 30px rgba(135, 206, 250, 1);
+}
+
+[data-skin="rainbow"] #game-board.bomb-mode .tile:hover {
+    box-shadow: 0 0 30px rgba(255, 255, 255, 1);
+}
+
+/* Дополнительные свечения для плиток в разных скинах */
+[data-skin="neon"] .tile:not(.tile-0) {
+    box-shadow: 0 0 10px rgba(120, 219, 255, 0.3);
+}
+
+[data-skin="gold"] .tile:not(.tile-0) {
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
+}
+
+[data-skin="space"] .tile:not(.tile-0) {
+    box-shadow: 0 0 12px rgba(138, 43, 226, 0.4);
+}
+
+[data-skin="fire"] .tile:not(.tile-0) {
+    box-shadow: 0 0 10px rgba(255, 69, 0, 0.4);
+}
+
+[data-skin="rainbow"] .tile:not(.tile-0) {
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+}

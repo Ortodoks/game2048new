@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- Prevent caching for Telegram Mini App -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <title>2048 - Игра</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    
+    <!-- Auto-Update System -->
+    <script src="version.js"></script>
+    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/skin-effects.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            padding-bottom: 0px;
+            margin: 0;
+            overflow: hidden;
+            height: 100vh;
+            position: fixed;
+            width: 100%;
+        }
+        
+        /* Только критичные стили для Telegram Web App */
+        
+        /* Hide Telegram debug info */
+        body::after {
+            display: none !important;
+        }
+        
+        [style*="position: fixed"][style*="bottom"] {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // Production mode - minimal debug cleanup
+        if (window.Telegram?.WebApp?.initDataUnsafe) {
+            // Only run debug cleanup if in development mode
+            const cleanupDebug = () => {
+                document.querySelectorAll('a[href*="t.me"], a[href*="userpic"]').forEach(el => {
+                    el.style.display = 'none';
+                });
+            };
+            setTimeout(cleanupDebug, 1000);
+        }
+    </script>
+    <div id="game-container">
+        <!-- Header -->
+        <header class="game-header">
+            <h1 class="game-title">2048</h1>
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="label">Счёт:</span>
+                    <span id="score">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="label">Монеты:</span>
+                    <span id="coins">1000</span>
+                </div>
+                <div class="stat-item ranking-item">
+                    <span class="label">Рейтинг:</span>
+                    <span id="user-ranking" class="ranking-badge">-</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Game Controls (Desktop) -->
+        <div class="controls desktop-only">
+            <button id="new-game-btn" class="btn btn-primary">Новая игра</button>
+            <button id="shop-btn" class="btn btn-secondary">Магазин</button>
+            <button id="settings-btn" class="btn btn-secondary">Настройки</button>
+        </div>
+
+        <!-- Bonus System -->
+        <div class="bonus-panel">
+            <button class="bonus-item" id="undo-booster" onclick="if(window.game) window.game.useUndoBooster()">
+                <div class="bonus-icon">⟲</div>
+                <span class="booster-count">0</span>
+            </button>
+            <button class="bonus-item" id="shuffle-booster" onclick="if(window.game) window.game.useShuffleBooster()">
+                <div class="bonus-icon">⚡</div>
+                <span class="booster-count">0</span>
+            </button>
+            <button class="bonus-item" id="bomb-booster" onclick="if(window.game) window.game.useBombBooster()">
+                <div class="bonus-icon">
+                    <svg viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor">
+                        <path d="M410.45504 215.04l-50.35008 81.06496 109.59872 8.25856L551.25504 337.92V248.32" fill="#FF4893"></path>
+                        <path d="M558.96064 341.02784c121.48224 72.28416 186.8288 217.99424 151.01952 362.27072-43.79648 176.50176-222.37696 284.04736-398.90944 240.2816-176.50176-43.79648-284.04736-222.40768-240.2816-398.90944C104.7808 407.6544 220.0576 312.13056 352.50688 296.78592c38.13888-4.44416 77.71648-2.20672 117.1968 7.5776a328.0384 328.0384 0 0 1 89.25696 36.66432z" fill="#FF4893"></path>
+                        <path d="M390.61504 975.7184a353.28512 353.28512 0 0 1-84.92544-10.4192C117.51936 918.60992 2.4064 727.49568 49.0752 539.28448c17.57696-70.86592 55.9616-133.48864 111.01184-181.10976 53.8112-46.55104 119.45984-75.46368 189.84448-83.61984 41.47712-4.82816 84.09088-2.08896 125.15328 8.08448a350.65344 350.65344 0 0 1 95.34464 39.17312c63.488 37.77536 114.49856 96.23552 143.616 164.58752 30.10048 70.67648 36.20864 147.54816 17.65888 222.29504-39.0144 157.21984-179.27168 267.02336-341.08928 267.02336z m-0.44032-658.7392c-11.68384 0-23.48544 0.68608-35.07712 2.03776-126.41792 14.6432-231.936 107.4944-262.5792 231.04512-40.7296 164.26496 59.72992 331.05408 223.9488 371.80416a308.61312 308.61312 0 0 0 74.15296 9.10336c141.19936 0 263.59808-95.83104 297.64608-233.04704 32.32768-130.26304-25.5488-269.11232-140.73856-337.65376a305.93024 305.93024 0 0 0-83.20512-34.18112 308.32128 308.32128 0 0 0-74.14784-9.10848z m521.02656 56.43264c-90.496 0-164.28544-73.472-164.61312-164.04992a22.3744 22.3744 0 0 1 22.2976-22.45632h0.08192a22.3744 22.3744 0 0 1 22.3744 22.2976c0.24064 65.95072 53.97504 119.45472 119.8592 119.45472h0.47104a22.3744 22.3744 0 1 1 0.06656 44.75392h-0.5376z" fill="#cdcae2"></path>
+                        <path d="M483.00544 237.93152a22.37952 22.37952 0 0 1-22.37952-22.37952v-0.48128c0-90.43456 73.5744-164.2752 164.01408-164.608h0.54272c90.5216 0 164.3264 73.472 164.6592 164.04992a22.3744 22.3744 0 0 1-22.2976 22.45632h-0.08192a22.3744 22.3744 0 0 1-22.3744-22.2976c-0.24064-66.08384-54.23104-119.70048-120.2944-119.45472-65.83808 0.24064-119.40864 54.01088-119.40864 119.85408v0.48128a22.38464 22.38464 0 0 1-22.37952 22.37952z m415.09376 336.98304a22.3744 22.3744 0 0 1-14.464-39.46496 119.39328 119.39328 0 0 0 17.14176-17.8688c34.67776-44.46208 33.34656-107.9808-3.14368-151.05024a22.3744 22.3744 0 0 1 34.14528-28.93312c50.11968 59.15648 51.93216 146.41664 4.31104 207.47776a164.20864 164.20864 0 0 1-23.56224 24.55552 22.26688 22.26688 0 0 1-14.42816 5.28384z" fill="#cdcae2"></path>
+                        <path d="M559.22176 362.89536a22.37952 22.37952 0 0 1-22.23104-20.08064l-8.04864-77.97248-115.07712-28.57472-43.62752 65.22368a22.3744 22.3744 0 0 1-37.20192-24.8832l52.36736-78.28992a22.3744 22.3744 0 0 1 23.99232-9.27744l145.5872 36.15744a22.3744 22.3744 0 0 1 16.86528 19.42016l9.65632 93.60384a22.38464 22.38464 0 0 1-22.28224 24.67328zM182.08768 515.328a22.37952 22.37952 0 0 1-19.18464-33.86368 256.08192 256.08192 0 0 1 27.32544-37.48864 22.3744 22.3744 0 0 1 33.62816 29.53216 211.27168 211.27168 0 0 0-22.54336 30.9248 22.35904 22.35904 0 0 1-19.2256 10.89536z m143.77472 345.17504a22.3232 22.3232 0 0 1-5.4016-0.6656c-66.11968-16.38912-121.89696-57.55904-157.05088-115.9168s-45.48096-126.90944-29.07136-193.03424a22.3744 22.3744 0 0 1 27.0848-16.33792l0.0256 0.00512a22.3744 22.3744 0 0 1 16.32768 27.10528c-13.52704 54.51776-5.0176 111.04256 23.97184 159.16032 28.98432 48.11776 74.97216 82.05824 129.47968 95.57504a22.37952 22.37952 0 0 1-5.36576 44.1088zM976.128 597.5552c8.0896 4.1472 12.4416 13.1072 10.752 22.016a20.38784 20.38784 0 0 1-18.1248 16.5376l-19.0976 1.8944 8.6528 17.152c4.0448 8.0896 2.304 17.92-4.3008 24.1152a20.40832 20.40832 0 0 1-24.3712 2.7648l-16.5888-9.728-3.072 18.944a20.47488 20.47488 0 0 1-20.224 17.2032 20.48 20.48 0 0 1-18.7904-12.288l-7.68-17.6128-13.6192 13.5168a20.46464 20.46464 0 0 1-24.32 3.3792 20.4544 20.4544 0 0 1-10.0864-22.3232l4.1472-18.7392-18.9952 2.9184c-8.96 1.3824-17.7664-3.328-21.6576-11.52-3.84-8.2432-1.8432-18.0224 4.9152-24.064l14.3872-12.7488-17.0496-8.8064a20.43904 20.43904 0 0 1-10.752-22.016 20.49536 20.49536 0 0 1 18.176-16.5376l19.0464-1.8944-8.6528-17.1008a20.4288 20.4288 0 0 1 4.3008-24.1664 20.39808 20.39808 0 0 1 24.3712-2.7136l16.5888 9.728 3.072-18.9952a20.48 20.48 0 0 1 38.9632-4.864l7.68 17.5616 13.6704-13.5168a20.47488 20.47488 0 0 1 24.2688-3.3792c7.9872 4.352 12.0832 13.4656 10.1376 22.3232l-4.1472 18.7904 18.9952-2.9184c8.96-1.3824 17.7664 3.328 21.6576 11.52 3.84 8.2432 1.8432 18.0224-4.9664 24.064l-14.336 12.6976 17.0496 8.8064z m-70.4 6.5024c-1.536-2.4576-2.56-5.2736-2.9184-8.2432-0.4096-2.9696-0.1024-5.9392 0.768-8.704-2.6624-1.0752-5.1712-2.7648-7.168-4.9664-2.048-2.1504-3.584-4.7104-4.5056-7.4752-2.816 0.7168-5.7856 0.8192-8.7552 0.256-2.9184-0.6144-5.6832-1.792-8.0384-3.4816-1.8944 2.2528-4.2496 4.0448-6.9632 5.3248-2.6624 1.28-5.5808 1.8944-8.4992 1.9456-0.2048 2.9184-1.024 5.7856-2.4576 8.3968-1.4848 2.6112-3.4304 4.864-5.7856 6.5536 1.536 2.4576 2.56 5.2736 2.9184 8.2432s0.1024 5.9392-0.768 8.704c2.6624 1.0752 5.1712 2.7648 7.2192 4.9664 2.048 2.2016 3.5328 4.7616 4.5056 7.5264 1.536-0.4096 3.1744-0.6144 4.864-0.6144 1.28 0 2.56 0.1536 3.84 0.3584 2.9184 0.5632 5.632 1.792 7.9872 3.4304 1.8944-2.2016 4.2496-4.0448 6.9632-5.3248s5.632-1.8944 8.5504-1.9456a20.39808 20.39808 0 0 1 8.2432-14.9504z" fill="#cdcae2"></path>
+                        <path d="M902.8096 595.8144c0.3584 2.9696 1.3824 5.7856 2.9184 8.2432a20.39808 20.39808 0 0 0-8.2432 14.9504c-2.9184 0.0512-5.8368 0.6656-8.5504 1.9456s-5.0688 3.1232-6.9632 5.3248a21.0432 21.0432 0 0 0-7.9872-3.4304c-1.28-0.2048-2.56-0.3584-3.84-0.3584-1.6896 0-3.328 0.2048-4.864 0.6144-0.9728-2.7648-2.4576-5.3248-4.5056-7.5264-2.048-2.2016-4.5568-3.8912-7.2192-4.9664 0.8704-2.7648 1.1264-5.7344 0.768-8.704-0.3584-2.9696-1.3824-5.7856-2.9184-8.2432 2.3552-1.6896 4.3008-3.9424 5.7856-6.5536 1.4336-2.6112 2.2528-5.4784 2.4576-8.3968a20.4288 20.4288 0 0 0 8.4992-1.9456c2.7136-1.28 5.0688-3.072 6.9632-5.3248 2.3552 1.6896 5.12 2.8672 8.0384 3.4816 2.9696 0.5632 5.9392 0.4608 8.7552-0.256 0.9216 2.7648 2.4576 5.3248 4.5056 7.4752 1.9968 2.2016 4.5056 3.8912 7.168 4.9664-0.8704 2.7648-1.1776 5.7344-0.768 8.704z" fill="#FF4893"></path>
+                    </svg>
+                </div>
+                <span class="booster-count">0</span>
+            </button>
+            <button class="bonus-item" id="lives-booster">
+                <div class="bonus-icon">💖</div>
+                <span class="booster-count">0</span>
+            </button>
+            <button class="bonus-item" id="new-game-bonus" onclick="if(window.game) window.game.newGame()">
+                <div class="bonus-icon">
+                    <svg viewBox="0 0 512 512" class="icon" version="1.1" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor">
+                        <path d="M310.87,218.29c17.57,17.43,46.64,18.62,66.11,3.82,8.01-6.09,10.73-12.72,16.76-20.02,41.54-3.33,85.06-3.4,89.53,48.27-4.91,59.91,6.31,129.62-.06,188.34-2.9,26.69-24.83,44.35-50.78,46.59-112.56,9.71-238.85-7.49-352.85,0-25.56-1.85-47.94-20.38-50.79-46.58-6.38-58.71,4.85-128.43-.06-188.34,4.47-51.7,48.05-51.59,89.53-48.27,15.04,26.87,43.53,38.97,72.18,23.91,12.39-6.52,14.43-17.42,21.05-22.23,9.57-6.95,68.99,1.99,84.64-3.29,4.51.65,11.02,14.13,14.74,17.81ZM362.02,362.95c1.23-26.77,0-55.23,0-82.22,0-15.71-29.76-23.73-34.15-3.86l.78,139.02c19.74,29.22,42.8-14.73,59.27-27.04l3.29-1.07c10.47,14.85,55.39,63.98,61.49,20.42,5.37-38.37-3.49-87.77.07-127.34-3.65-23.17-34.5-16.82-34.5-4.45v89.8c-22.44-24.09-33.54-27.24-55.2-.02-6.61.53-1.1-2.24-1.05-3.23ZM93.72,412.72c3.95-18.52-2.93-50.26,0-70.32,14.23,12.85,40.56,74.79,54.65,80.57,17.46,7.17,24.13-5.42,25.5-20.98,2.29-26.11,3.17-93.79-.66-118.52-2.12-13.71-11.11-22.14-25.37-15.68-1.97.89-8.68,9.42-8.68,10.78v70.32l-49.89-78.86c-18.16-8.91-28.42-2.62-30.26,17.11-2.26,24.22-3.36,100.73.6,122.9,3.76,21.02,31,17.25,34.1,2.68ZM225.71,299.12h68.16c10.47,0,17.17-27.52,1.71-32-27.79,1.54-61.19-3.64-88.3-.49-11.21,1.3-13.18,5.7-14.12,16.17-2.76,30.68-3.03,95.29-.03,125.73.68,6.91,4.33,14.57,12.08,16.05,11.24,2.14,74.33,1.78,86.37-.08,21.24-3.29,13.46-32.33,2.29-32.33h-68.16v-32.46h37.87c13.81,0,13.81-32.46,0-32.46h-37.87v-28.13Z" fill="#ff1300"/>
+                        <path d="M173.25,27.04c34.95-4.73,127.9-4.09,163.87-.54,26.34,2.6,48.53,21.4,50.96,48.58,2.36,26.43,3.08,89.18-.04,114.82-3.02,24.78-27.77,36.48-50.71,33.3-39.76-5.52-27.86-70.25-82.4-69.21-52.54.99-40.82,63.74-80.26,69.21-24.98,3.47-47.82-9.14-50.67-35.5-2.64-24.38-2.91-92.6.57-116.28,3.36-22.9,26.41-41.35,48.68-44.36ZM338.21,80.59c5.7-36.05-42.27-35.2-36.76,0-35.41-5.67-35.32,42.47,0,36.76-5.67,35.41,42.47,35.32,36.76,0,35.54,5.11,36.4-42.03,0-36.76ZM171.04,61.48c-17.97,3.73-18.49,28.1-3.82,37.49-26.94,20.66,3.29,54.64,25.24,27.19,4.33-.77,17.06,20.01,33.13,5.15,16.67-15.42-4.29-26.57-4.29-32.34,0-6.14,18.65-13.63,6.61-30.34-14.08-19.54-32.31,3.71-35.45,3.15-6.76-6-11.04-12.45-21.42-10.3Z" fill="#ec008c"/>
+                    </svg>
+                </div>
+            </button>
+        </div>
+
+        <!-- Game Board -->
+        <div id="game-board-container">
+            <div id="game-board">
+                <!-- Game tiles will be generated here -->
+            </div>
+        </div>
+
+        <!-- Booster Message -->
+        <div id="booster-message" class="booster-message"></div>
+
+        <!-- Game Over Modal -->
+        <div id="game-over-modal" class="modal">
+            <div class="modal-content">
+                <h2>Игра окончена!</h2>
+                <p>Ваш счёт: <span id="final-score">0</span></p>
+                <p>Заработано монет: <span id="earned-coins">0</span></p>
+                <div class="modal-buttons">
+                    <button id="restart-btn" class="btn btn-primary">Играть снова</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Shop Modal -->
+        <div id="shop-modal" class="modal">
+            <div class="modal-content shop-content">
+                <h2>Магазин скинов</h2>
+                <div class="shop-tabs">
+                    <button class="tab-btn active" data-tab="skins">Скины</button>
+                    <button class="tab-btn" data-tab="bonuses">Бонусы</button>
+                </div>
+                
+                <div id="skins-tab" class="tab-content active">
+                    <div class="shop-grid" id="skins-grid">
+                        <!-- Skins will be populated by JavaScript -->
+                    </div>
+                </div>
+                
+                <div id="bonuses-tab" class="tab-content">
+                    <div class="shop-grid" id="bonuses-grid">
+                        <!-- Bonuses will be populated by JavaScript -->
+                    </div>
+                </div>
+                
+                <button id="close-shop-btn" class="btn btn-secondary">Закрыть</button>
+            </div>
+        </div>
+
+
+        <!-- Settings Modal -->
+        <div id="settings-modal" class="modal">
+            <div class="modal-content">
+                <h2>⚙️ Быстрые настройки</h2>
+                <div class="quick-settings">
+                    <p>Основные настройки теперь находятся в разделе <strong>Профиль → Настройки</strong></p>
+                    <div class="quick-actions">
+                        <button id="open-profile-settings" class="btn btn-primary">
+                            <span>👤 Открыть профиль</span>
+                        </button>
+                    </div>
+                </div>
+                <button id="close-settings-btn" class="btn btn-secondary">Закрыть</button>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!-- Scripts (auto-versioned by service worker) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="js/telegram-integration.js"></script>
+    <script src="js/database.js"></script>
+    <script src="js/userManager.js"></script>
+    <script src="js/skinConfigs.js"></script>
+    <script src="js/vibration.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/graphics.js"></script>
+    <script src="js/shop.js"></script>
+    <script src="js/bonuses.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/leaderboard.js"></script>
+    <script src="js/toolbar-avatar.js"></script>
+    <script src="js/toolbar-nav.js"></script>
+    <script src="js/main.js"></script>
+    
+    <script>
+        // КРИТИЧНО: Применяем сохраненный скин СРАЗУ к body при загрузке
+        (function() {
+            const savedSkin = localStorage.getItem('currentSkin') || 'default';
+            console.log('🎨 INIT: Applying saved skin to body:', savedSkin);
+            document.documentElement.setAttribute('data-skin', savedSkin);
+            document.body.setAttribute('data-skin', savedSkin);
+            console.log('✅ INIT: data-skin set on load');
+        })();
+        
+        // Initialize game components
+        document.addEventListener('DOMContentLoaded', function() {
+            // Wait for Telegram integration to be ready
+            setTimeout(() => {
+                // Initialize leaderboard after Telegram is ready
+                try {
+                    window.leaderboardManager = new LeaderboardManager();
+                    console.log('Leaderboard initialized with user:', window.leaderboardManager.currentUser);
+                } catch (error) {
+                    console.error('Failed to initialize leaderboard:', error);
+                }
+            }, 200);
+            
+            // Initialize graphics
+            try {
+                window.graphics = new Graphics2D();
+                console.log('✅ Graphics initialized with skin:', window.graphics.currentSkin);
+            } catch (error) {
+                console.error('Failed to initialize graphics:', error);
+            }
+            
+            // Initialize game
+            try {
+                window.game = new Game2048();
+                console.log('Game initialized successfully');
+                
+                // Update graphics with initial board
+                if (window.graphics && window.game) {
+                    window.graphics.updateBoard(window.game.board);
+                    
+                    // Add initial tiles if board is empty
+                    if (window.game.board.every(row => row.every(cell => cell === 0))) {
+                        window.game.addRandomTile();
+                        window.game.addRandomTile();
+                        window.graphics.updateBoard(window.game.board);
+                        window.game.updateDisplay();
+                        console.log('Initial tiles added');
+                    }
+                } else {
+                    console.error('Graphics or Game not available:', { graphics: !!window.graphics, game: !!window.game });
+                }
+            } catch (error) {
+                console.error('Failed to initialize game:', error);
+                // Попробуем инициализировать без graphics
+                try {
+                    window.game = new Game2048();
+                    if (window.game.board.every(row => row.every(cell => cell === 0))) {
+                        window.game.addRandomTile();
+                        window.game.addRandomTile();
+                        window.game.updateDisplay();
+                    }
+                    console.log('Game initialized without graphics');
+                } catch (fallbackError) {
+                    console.error('Failed to initialize game even without graphics:', fallbackError);
+                }
+            }
+        });
+    </script>
+    
+    <!-- Animated Toolbar -->
+    <div class="toolbar">
+        <div class="icon icon--home toolbar__icon is-active" data-page="home">
+            <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                <rect class="a" x="24" y="5.5" width="18.5" height="18.5" rx="4" fill="none" stroke="currentColor" stroke-linejoin="round"></rect>
+                <rect class="a" x="5.5" y="24" width="18.5" height="18.5" rx="4" fill="none" stroke="currentColor" stroke-linejoin="round"></rect>
+                <rect class="a" x="24" y="24" width="18.5" height="18.5" rx="4" fill="none" stroke="currentColor" stroke-linejoin="round"></rect>
+                <rect class="a" x="5.5" y="5.5" width="18.5" height="18.5" rx="4" fill="none" stroke="currentColor" stroke-linejoin="round"></rect>
+            </svg>
+        </div>
+
+        <svg class="icon icon--chart toolbar__icon" data-page="tasks" width="24" height="21" viewBox="0 0 24 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M14.2491 16.7555C13.9697 17.321 13.4303 18 12.5 18C11.6845 18 11.1251 17.5105 10.7863 16.9787C10.4629 16.4712 10.2644 15.8237 10.1285 15.1732C9.85403 13.8589 9.7633 12.1512 9.7038 10.5368C9.69123 10.1958 9.68004 9.85882 9.66906 9.52853C9.62659 8.25006 9.58744 7.07143 9.48457 6.14116C9.47719 6.07445 9.46959 6.01015 9.46178 5.94825C9.45696 5.96452 9.45214 5.98098 9.4473 5.99763C9.16661 6.96419 8.93645 8.27726 8.69349 9.67166L8.68604 9.71441C8.45204 11.0574 8.20493 12.4757 7.89001 13.5601C7.73252 14.1025 7.5375 14.6372 7.27709 15.0557C7.03799 15.4399 6.56714 16 5.79166 16C4.7035 16 4.09185 15.1378 3.77627 14.5138C3.43377 13.8367 3.20233 12.9844 3.02231 12.233C2.95225 11.9406 2.89044 11.6665 2.83272 11.4105C2.76944 11.1299 2.71107 10.8711 2.65214 10.6338C2.35554 11.1802 2.09737 11.851 1.95258 12.3043L0.0474205 11.6957C0.219649 11.1566 0.530238 10.3423 0.914202 9.64346C1.10415 9.29774 1.33678 8.93433 1.60956 8.64373C1.85202 8.38542 2.29764 8 2.91666 8C3.61347 8 3.97613 8.54018 4.10107 8.7549C4.25983 9.02776 4.37297 9.35807 4.46035 9.65648C4.57709 10.0551 4.69172 10.562 4.80457 11.061C4.85921 11.3025 4.91343 11.5423 4.96727 11.767C5.14663 12.5156 5.33445 13.1633 5.56097 13.6112C5.60393 13.6961 5.64269 13.7634 5.6768 13.8166C5.76702 13.6261 5.86619 13.3576 5.96936 13.0024C6.25005 12.0358 6.48021 10.7227 6.72317 9.32834L6.73062 9.28559C6.96462 7.94259 7.21173 6.5243 7.52665 5.43987C7.68414 4.89755 7.87916 4.36278 8.13958 3.94431C8.37867 3.5601 8.84952 3 9.625 3C10.5539 3 10.962 3.80362 11.1143 4.1998C11.2992 4.6807 11.4032 5.29472 11.4725 5.92134C11.5847 6.93626 11.6271 8.22023 11.6697 9.50767C11.6802 9.82731 11.6908 10.1472 11.7024 10.4632C11.7627 12.0988 11.8517 13.6411 12.0863 14.7643C12.1992 15.3051 12.33 15.6645 12.4541 15.8734C12.4548 15.8721 12.4554 15.8708 12.4561 15.8695C12.6027 15.5727 12.7399 15.0708 12.8519 14.3471C13.0573 13.0198 13.1353 11.2642 13.2182 9.3995C13.2247 9.252 13.2313 9.10383 13.238 8.95512C13.327 6.97365 13.4332 4.89535 13.7421 3.30893C13.8951 2.52269 14.1144 1.76214 14.4648 1.17501C14.8262 0.569572 15.4295 0 16.3333 0C17.3348 0 17.917 0.740883 18.2253 1.38429C18.5418 2.04487 18.7345 2.90987 18.8656 3.82728C19.1284 5.66656 19.1895 8.08749 19.2484 10.4259L19.2497 10.4748C19.3101 12.8713 19.3699 15.1794 19.6143 16.8898C19.7377 17.7536 19.897 18.373 20.0783 18.7515C20.1443 18.8892 20.1948 18.9611 20.2257 18.9964C20.2865 18.9875 20.3283 18.96 20.3864 18.8897C20.4961 18.7572 20.626 18.496 20.7381 18.0416C20.9635 17.1285 21.0228 15.8671 21.0843 14.4565L21.0874 14.3841C21.1449 13.0637 21.2082 11.6078 21.4868 10.4791C21.6292 9.9022 21.8513 9.30411 22.2395 8.83506C22.6622 8.32426 23.2583 8 24 8V10C23.9031 10 23.8553 10.0195 23.7802 10.1103C23.6705 10.2428 23.5407 10.504 23.4285 10.9584C23.2031 11.8715 23.1438 13.1329 23.0824 14.5435L23.0792 14.6159C23.0218 15.9363 22.9585 17.3922 22.6798 18.5209C22.5374 19.0978 22.3154 19.6959 21.9272 20.1649C21.5044 20.6757 20.9083 21 20.1667 21C19.1652 21 18.583 20.2591 18.2747 19.6157C17.9582 18.9551 17.7655 18.0901 17.6344 17.1727C17.3716 15.3335 17.3105 12.9125 17.2516 10.5742L17.2503 10.5252C17.1899 8.1287 17.1301 5.82061 16.8857 4.11022C16.7623 3.24638 16.603 2.62701 16.4217 2.24853C16.372 2.14478 16.331 2.07836 16.3007 2.03681C16.2716 2.06752 16.2309 2.11845 16.1822 2.19999C16.0104 2.48786 15.8441 2.97731 15.7052 3.69107C15.43 5.10465 15.3266 7.02635 15.236 9.04488C15.2289 9.20321 15.2218 9.36217 15.2148 9.52144C15.1341 11.3454 15.0515 13.2111 14.8284 14.6529C14.7083 15.4292 14.5348 16.1773 14.2491 16.7555Z" fill="currentColor"/>
+        </svg>
+
+        <div class="icon icon--podium toolbar__icon" data-page="leaderboard">
+            <svg width="24" height="24" viewBox="0 0 488.049 488.049" xmlns="http://www.w3.org/2000/svg">
+                <path d="M127.442,193.204H17.235C7.732,193.204,0,200.936,0,210.438v256.539c0,9.504,7.732,17.235,17.235,17.235l110.207-0.001 c9.503,0,17.235-7.731,17.235-17.234V210.438C144.678,200.936,136.946,193.204,127.442,193.204z"/>
+                <path d="M299.128,98.519H188.921c-9.503,0-17.234,7.731-17.234,17.235v351.223c0,9.503,7.732,17.234,17.234,17.234h110.207 c9.504,0,17.236-7.731,17.236-17.234V115.755C316.364,106.251,308.632,98.519,299.128,98.519z"/>
+                <path d="M470.813,3.836H360.606c-9.503,0-17.235,7.732-17.235,17.235v445.906c0,9.503,7.732,17.234,17.235,17.234h110.207 c9.503,0,17.235-7.731,17.235-17.234V21.071C488.049,11.567,480.317,3.836,470.813,3.836z"/>
+            </svg>
+        </div>
+
+        <svg class="icon icon--shop toolbar__icon" data-page="shop" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3.5 11V14C3.5 17.7712 3.5 19.6569 4.67157 20.8284C5.84315 22 7.72876 22 11.5 22H12.5C16.2712 22 18.1569 22 19.3284 20.8284M20.5 11V14C20.5 15.1698 20.5 16.1581 20.465 17" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"></path>
+            <path d="M9.50002 2H14.5M9.50002 2L8.84828 8.51737C8.66182 10.382 10.1261 12 12 12C13.874 12 15.3382 10.382 15.1518 8.51737L14.5 2M9.50002 2H7.41771C6.50969 2 6.05567 2 5.66628 2.10675C4.84579 2.33168 4.15938 2.89439 3.77791 3.65484M9.50002 2L8.77549 9.24527C8.61911 10.8091 7.30318 12 5.73155 12C3.8011 12 2.35324 10.2339 2.73183 8.34093L2.80002 8M14.5 2H16.5823C17.4904 2 17.9444 2 18.3338 2.10675C19.1542 2.33168 19.8407 2.89439 20.2221 3.65484C20.4032 4.01573 20.4922 4.46093 20.6703 5.35133L21.2682 8.34093C21.6468 10.2339 20.1989 12 18.2685 12C16.6969 12 15.3809 10.8091 15.2245 9.24527L14.5 2Z" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"></path>
+            <path d="M9.5 21.5V18.5C9.5 17.5654 9.5 17.0981 9.70096 16.75C9.83261 16.522 10.022 16.3326 10.25 16.201C10.5981 16 11.0654 16 12 16C12.9346 16 13.4019 16 13.75 16.201C13.978 16.3326 14.1674 16.522 14.299 16.75C14.5 17.0981 14.5 17.5654 14.5 18.5V21.5" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"></path>
+        </svg>
+
+        <div class="icon icon--search toolbar__icon" data-page="profile">
+            <div class="toolbar-avatar" id="toolbar-avatar">👤</div>
+        </div>
+    </div>
+
+    <!-- SVG -->
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+      <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" id="icon-01">
+        <path d="M9.82,1.5A11.13,11.13,0,0,0,1.5,12.33a11.08,11.08,0,0,0,11,11.17,11.08,11.08,0,0,0,11-11.17A11.16,11.16,0,0,0,16.33,1.86V12.33a3.9,3.9,0,1,1-.08-.78"/>
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" id="icon-02">
+        <path d="M18.16,23.5h2.16a3.19,3.19,0,0,0,3.18-3.18V4.68A3.19,3.19,0,0,0,20.32,1.5H8.81l0,4.19A3.15,3.15,0,1,1,5.69,8.83H1.5V20.32A3.19,3.19,0,0,0,4.68,23.5h8.83s-.49-5.76,4.75-8.38" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" id="icon-03">
+        <path d="M14.6,5.13V4.68A3.19,3.19,0,0,0,11.42,1.5H4.68A3.19,3.19,0,0,0,1.5,4.68V20.32A3.19,3.19,0,0,0,4.68,23.5H20.32a3.19,3.19,0,0,0,3.18-3.18V12.53a3.19,3.19,0,0,0-3.18-3.17H6.77" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" id="icon-04">
+        <path d="M4,23.5a11,11,0,0,1,17,0" />
+        <path d="M15.66,10.5a3.16,3.16,0,0,1-6.32,0H3.5a9,9,0,1,1,2.87,6.59" />
+      </symbol>
+    </svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" height="0" width="0">
+        <clipPath id="path-icon-01">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        </clipPath>
+        <clipPath id="path-icon-02">
+            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+        </clipPath>
+        <clipPath id="path-icon-03">
+            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+        </clipPath>
+        <clipPath id="path-icon-04">
+            <path d="M6 3h4l4 6-4 10L6 9l4-6z"/>
+        </clipPath>
+        <clipPath id="path-icon-05">
+            <circle cx="12" cy="7" r="4"/>
+        </clipPath>
+    </svg>
+
+
+</body>
+</html>

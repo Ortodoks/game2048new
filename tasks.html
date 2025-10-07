@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Задания - 2048</title>
+    <script src="version.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100vh;
+        }
+        
+        /* Tasks Page Styles */
+        .tasks-page {
+            height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            padding: 20px 20px 100px 20px;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .tasks-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .tasks-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            margin: 0 0 10px 0;
+        }
+        
+        .tasks-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1rem;
+        }
+        
+        .development-message {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 60px 40px;
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        .development-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+        
+        .development-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #fff;
+            margin: 0 0 15px 0;
+        }
+        
+        .development-text {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        .coming-soon {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: rgba(120, 219, 255, 0.1);
+            border: 1px solid rgba(120, 219, 255, 0.3);
+            border-radius: 12px;
+            color: #78dbff;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .tasks-page {
+                padding: 15px 15px 100px 15px;
+            }
+            
+            .tasks-title {
+                font-size: 1.5rem;
+            }
+            
+            .development-message {
+                padding: 40px 30px;
+            }
+            
+            .development-icon {
+                font-size: 3rem;
+            }
+            
+            .development-title {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <script>
+        setInterval(() => {
+            document.querySelectorAll('a').forEach(link => {
+                if (link.href && link.href.includes('t.me')) {
+                    link.style.display = 'none';
+                }
+            });
+        }, 200);
+    </script>    <div class="tasks-page">
+        <div class="tasks-header">
+            <h1 class="tasks-title">📋 Задания</h1>
+            <p class="tasks-subtitle">Ежедневные вызовы и награды</p>
+        </div>
+        
+        <div class="development-message">
+            <div class="development-icon">🚧</div>
+            <h2 class="development-title">В разработке</h2>
+            <p class="development-text">
+                Мы работаем над созданием увлекательных заданий и наград. 
+                Скоро здесь появятся ежедневные вызовы, достижения и бонусы!
+            </p>
+            <div class="coming-soon">Скоро будет доступно</div>
+        </div>
+    </div>
+
+
+    <script>
+        // Initialize tasks page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Tasks page loaded');
+            
+            // Navigation handled by toolbar-nav.js
+        });
+    </script>
+
+    <!-- Animated Toolbar -->
+    <div class="toolbar">
+        <div class="icon icon--home toolbar__icon" data-page="home">
+            <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                <rect class="a" x="24" y="5.5" width="18.5" height="18.5" rx="4" fill="none" stroke="currentColor" stroke-linejoin="round"></rect>
+                <rect class="a" x="5.5" y="24" width="18.5" height="18.5" rx="4" fill="none" stroke="currentColor" stroke-linejoin="round"></rect>
+                <rect class="a" x="24" y="24" width="18.5" height="18.5" rx="4" fill="none" stroke="currentColor" stroke-linejoin="round"></rect>
+                <rect class="a" x="5.5" y="5.5" width="18.5" height="18.5" rx="4" fill="none" stroke="currentColor" stroke-linejoin="round"></rect>
+                <polyline class="b" points="16.805 38.25 16.804 28.25 11.438 34.967 18.063 34.967" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></polyline>
+                <path class="b" d="M29.9375,16.4375a3.3125,3.3125,0,0,0,6.625,0v-3.375a3.3125,3.3125,0,0,0-6.625,0Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path class="b" d="M11.4375,13.0625a3.3125,3.3125,0,0,1,6.625,0,3.0905,3.0905,0,0,1-.97,2.3423c-1.34,1.176-5.6548,4.3452-5.6548,4.3452h6.625" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path class="b" d="M32.4375,33.25a2.5,2.5,0,0,0-2.5,2.5h0a2.5,2.5,0,0,0,2.5,2.5h1.625a2.5,2.5,0,0,0,2.5-2.5h0a2.5,2.5,0,0,0-2.5-2.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path class="b" d="M34.0625,33.25a2.5,2.5,0,0,0,2.5-2.5h0a2.5,2.5,0,0,0-2.5-2.5h-1.625a2.5,2.5,0,0,0-2.5,2.5h0a2.5,2.5,0,0,0,2.5,2.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
+                <line class="b" x1="32.4375" y1="33.25" x2="34.0625" y2="33.25" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></line>
+            </svg>
+        </div>
+
+        <svg class="icon icon--chart toolbar__icon is-active" data-page="tasks" width="24" height="21" viewBox="0 0 24 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M14.2491 16.7555C13.9697 17.321 13.4303 18 12.5 18C11.6845 18 11.1251 17.5105 10.7863 16.9787C10.4629 16.4712 10.2644 15.8237 10.1285 15.1732C9.85403 13.8589 9.7633 12.1512 9.7038 10.5368C9.69123 10.1958 9.68004 9.85882 9.66906 9.52853C9.62659 8.25006 9.58744 7.07143 9.48457 6.14116C9.47719 6.07445 9.46959 6.01015 9.46178 5.94825C9.45696 5.96452 9.45214 5.98098 9.4473 5.99763C9.16661 6.96419 8.93645 8.27726 8.69349 9.67166L8.68604 9.71441C8.45204 11.0574 8.20493 12.4757 7.89001 13.5601C7.73252 14.1025 7.5375 14.6372 7.27709 15.0557C7.03799 15.4399 6.56714 16 5.79166 16C4.7035 16 4.09185 15.1378 3.77627 14.5138C3.43377 13.8367 3.20233 12.9844 3.02231 12.233C2.95225 11.9406 2.89044 11.6665 2.83272 11.4105C2.76944 11.1299 2.71107 10.8711 2.65214 10.6338C2.35554 11.1802 2.09737 11.851 1.95258 12.3043L0.0474205 11.6957C0.219649 11.1566 0.530238 10.3423 0.914202 9.64346C1.10415 9.29774 1.33678 8.93433 1.60956 8.64373C1.85202 8.38542 2.29764 8 2.91666 8C3.61347 8 3.97613 8.54018 4.10107 8.7549C4.25983 9.02776 4.37297 9.35807 4.46035 9.65648C4.57709 10.0551 4.69172 10.562 4.80457 11.061C4.85921 11.3025 4.91343 11.5423 4.96727 11.767C5.14663 12.5156 5.33445 13.1633 5.56097 13.6112C5.60393 13.6961 5.64269 13.7634 5.6768 13.8166C5.76702 13.6261 5.86619 13.3576 5.96936 13.0024C6.25005 12.0358 6.48021 10.7227 6.72317 9.32834L6.73062 9.28559C6.96462 7.94259 7.21173 6.5243 7.52665 5.43987C7.68414 4.89755 7.87916 4.36278 8.13958 3.94431C8.37867 3.5601 8.84952 3 9.625 3C10.5539 3 10.962 3.80362 11.1143 4.1998C11.2992 4.6807 11.4032 5.29472 11.4725 5.92134C11.5847 6.93626 11.6271 8.22023 11.6697 9.50767C11.6802 9.82731 11.6908 10.1472 11.7024 10.4632C11.7627 12.0988 11.8517 13.6411 12.0863 14.7643C12.1992 15.3051 12.33 15.6645 12.4541 15.8734C12.4548 15.8721 12.4554 15.8708 12.4561 15.8695C12.6027 15.5727 12.7399 15.0708 12.8519 14.3471C13.0573 13.0198 13.1353 11.2642 13.2182 9.3995C13.2247 9.252 13.2313 9.10383 13.238 8.95512C13.327 6.97365 13.4332 4.89535 13.7421 3.30893C13.8951 2.52269 14.1144 1.76214 14.4648 1.17501C14.8262 0.569572 15.4295 0 16.3333 0C17.3348 0 17.917 0.740883 18.2253 1.38429C18.5418 2.04487 18.7345 2.90987 18.8656 3.82728C19.1284 5.66656 19.1895 8.08749 19.2484 10.4259L19.2497 10.4748C19.3101 12.8713 19.3699 15.1794 19.6143 16.8898C19.7377 17.7536 19.897 18.373 20.0783 18.7515C20.1443 18.8892 20.1948 18.9611 20.2257 18.9964C20.2865 18.9875 20.3283 18.96 20.3864 18.8897C20.4961 18.7572 20.626 18.496 20.7381 18.0416C20.9635 17.1285 21.0228 15.8671 21.0843 14.4565L21.0874 14.3841C21.1449 13.0637 21.2082 11.6078 21.4868 10.4791C21.6292 9.9022 21.8513 9.30411 22.2395 8.83506C22.6622 8.32426 23.2583 8 24 8V10C23.9031 10 23.8553 10.0195 23.7802 10.1103C23.6705 10.2428 23.5407 10.504 23.4285 10.9584C23.2031 11.8715 23.1438 13.1329 23.0824 14.5435L23.0792 14.6159C23.0218 15.9363 22.9585 17.3922 22.6798 18.5209C22.5374 19.0978 22.3154 19.6959 21.9272 20.1649C21.5044 20.6757 20.9083 21 20.1667 21C19.1652 21 18.583 20.2591 18.2747 19.6157C17.9582 18.9551 17.7655 18.0901 17.6344 17.1727C17.3716 15.3335 17.3105 12.9125 17.2516 10.5742L17.2503 10.5252C17.1899 8.1287 17.1301 5.82061 16.8857 4.11022C16.7623 3.24638 16.603 2.62701 16.4217 2.24853C16.372 2.14478 16.331 2.07836 16.3007 2.03681C16.2716 2.06752 16.2309 2.11845 16.1822 2.19999C16.0104 2.48786 15.8441 2.97731 15.7052 3.69107C15.43 5.10465 15.3266 7.02635 15.236 9.04488C15.2289 9.20321 15.2218 9.36217 15.2148 9.52144C15.1341 11.3454 15.0515 13.2111 14.8284 14.6529C14.7083 15.4292 14.5348 16.1773 14.2491 16.7555Z" fill="currentColor"/>
+        </svg>
+
+        <div class="icon icon--podium toolbar__icon" data-page="leaderboard">
+            <svg width="24" height="24" viewBox="0 0 488.049 488.049" xmlns="http://www.w3.org/2000/svg">
+                <path d="M127.442,193.204H17.235C7.732,193.204,0,200.936,0,210.438v256.539c0,9.504,7.732,17.235,17.235,17.235l110.207-0.001 c9.503,0,17.235-7.731,17.235-17.234V210.438C144.678,200.936,136.946,193.204,127.442,193.204z"/>
+                <path d="M299.128,98.519H188.921c-9.503,0-17.234,7.731-17.234,17.235v351.223c0,9.503,7.732,17.234,17.234,17.234h110.207 c9.504,0,17.236-7.731,17.236-17.234V115.755C316.364,106.251,308.632,98.519,299.128,98.519z"/>
+                <path d="M470.813,3.836H360.606c-9.503,0-17.235,7.732-17.235,17.235v445.906c0,9.503,7.732,17.234,17.235,17.234h110.207 c9.503,0,17.235-7.731,17.235-17.234V21.071C488.049,11.567,480.317,3.836,470.813,3.836z"/>
+            </svg>
+        </div>
+
+        <svg class="icon icon--shop toolbar__icon" data-page="shop" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3.5 11V14C3.5 17.7712 3.5 19.6569 4.67157 20.8284C5.84315 22 7.72876 22 11.5 22H12.5C16.2712 22 18.1569 22 19.3284 20.8284M20.5 11V14C20.5 15.1698 20.5 16.1581 20.465 17" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"></path>
+            <path d="M9.50002 2H14.5M9.50002 2L8.84828 8.51737C8.66182 10.382 10.1261 12 12 12C13.874 12 15.3382 10.382 15.1518 8.51737L14.5 2M9.50002 2H7.41771C6.50969 2 6.05567 2 5.66628 2.10675C4.84579 2.33168 4.15938 2.89439 3.77791 3.65484M9.50002 2L8.77549 9.24527C8.61911 10.8091 7.30318 12 5.73155 12C3.8011 12 2.35324 10.2339 2.73183 8.34093L2.80002 8M14.5 2H16.5823C17.4904 2 17.9444 2 18.3338 2.10675C19.1542 2.33168 19.8407 2.89439 20.2221 3.65484C20.4032 4.01573 20.4922 4.46093 20.6703 5.35133L21.2682 8.34093C21.6468 10.2339 20.1989 12 18.2685 12C16.6969 12 15.3809 10.8091 15.2245 9.24527L14.5 2Z" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"></path>
+            <path d="M9.5 21.5V18.5C9.5 17.5654 9.5 17.0981 9.70096 16.75C9.83261 16.522 10.022 16.3326 10.25 16.201C10.5981 16 11.0654 16 12 16C12.9346 16 13.4019 16 13.75 16.201C13.978 16.3326 14.1674 16.522 14.299 16.75C14.5 17.0981 14.5 17.5654 14.5 18.5V21.5" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"></path>
+        </svg>
+
+        <div class="icon icon--search toolbar__icon" data-page="profile">
+            <div class="toolbar-avatar" id="toolbar-avatar">👤</div>
+        </div>
+    </div>
+
+    <script src="js/toolbar-avatar.js"></script>
+    <script src="js/toolbar-nav.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

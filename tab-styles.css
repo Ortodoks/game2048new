@@ -1,0 +1,148 @@
+/* Полные стили для табов из оригинального примера */
+
+.tabs {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  z-index: 999999;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 25px;
+  padding: 8px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 2px 16px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.tabs input[type="radio"] {
+  display: none;
+}
+
+.tabs label {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.tabs label:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.tabs input[type="radio"]:checked + label {
+  background: rgba(78, 205, 196, 0.2);
+  transform: translateY(-4px);
+  box-shadow: 
+    0 4px 20px rgba(78, 205, 196, 0.3),
+    0 2px 10px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(78, 205, 196, 0.3);
+}
+
+.tabs svg {
+  width: 28px;
+  height: 28px;
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.7);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: all 0.3s ease;
+  z-index: 2;
+  position: relative;
+}
+
+.tabs input[type="radio"]:checked + label svg {
+  stroke: #4ecdc4;
+  transform: scale(1.1);
+}
+
+.wave {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: linear-gradient(135deg, #4ecdc4, #44a08d);
+  border-radius: 50%;
+  transform: translateX(-50%);
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  opacity: 0;
+  z-index: 1;
+}
+
+.tabs input[type="radio"]:checked + label .wave {
+  width: 80px;
+  height: 80px;
+  opacity: 0.3;
+  animation: wave-pulse 2s infinite;
+}
+
+@keyframes wave-pulse {
+  0% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateX(-50%) scale(1.2);
+    opacity: 0.1;
+  }
+  100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.3;
+  }
+}
+
+/* Дополнительные стили для анимации */
+.tabs label::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(78, 205, 196, 0.1), rgba(68, 160, 141, 0.1));
+  border-radius: 20px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 0;
+}
+
+.tabs input[type="radio"]:checked + label::before {
+  opacity: 1;
+}
+
+/* Мобильная адаптация */
+@media (max-width: 768px) {
+  .tabs {
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    padding: 6px;
+    border-radius: 20px;
+  }
+  
+  .tabs label {
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
+  }
+  
+  .tabs svg {
+    width: 24px;
+    height: 24px;
+  }
+}
