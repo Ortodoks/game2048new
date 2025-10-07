@@ -406,6 +406,17 @@ class GameDatabase {
         }
     }
 
+    getApiUrl() {
+        if (window.telegramIntegration && window.telegramIntegration.getApiUrl) {
+            return window.telegramIntegration.getApiUrl();
+        }
+        // Fallback
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            return 'http://localhost:3000';
+        }
+        return window.location.origin;
+    }
+
     async saveToGameDatabase(profile) {
         if (!profile || !profile.telegramId) {
             console.warn('No valid profile to save to server');
@@ -413,10 +424,7 @@ class GameDatabase {
         }
 
         try {
-            // Определяем URL сервера
-            const API_URL = window.location.hostname === 'localhost' 
-                ? 'http://localhost:3000' 
-                : 'https://your-domain.com';
+            const API_URL = this.getApiUrl();
 
             const response = await fetch(`${API_URL}/api/user/register`, {
                 method: 'POST',
@@ -440,6 +448,31 @@ class GameDatabase {
             }
         } catch (error) {
             console.error('❌ Error registering user on server:', error);
+            return false;
+        }
+    }
+
+    async syncToServer(telegramId) {
+        if (!telegramId) return false;
+
+        try {
+            const settings = await this.getUserSettings(telegramId);
+            const API_URL = this.getApiUrl();
+
+            // Sync settings to server
+            await fetch(`${API_URL}/api/user-settings`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    telegram_id: telegramId,
+                    settings: settings
+                })
+            });
+
+            console.log('✅ Settings synced to server');
+            return true;
+        } catch (error) {
+            console.error('❌ Error syncing to server:', error);
             return false;
         }
     }

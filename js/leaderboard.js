@@ -109,6 +109,50 @@ class LeaderboardManager {
         return 'user_' + Math.random().toString(36).substr(2, 9);
     }
 
+    getApiUrl() {
+        if (window.telegramIntegration && window.telegramIntegration.getApiUrl) {
+            return window.telegramIntegration.getApiUrl();
+        }
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            return 'http://localhost:3000';
+        }
+        return window.location.origin;
+    }
+
+    async loadLeaderboardFromServer() {
+        try {
+            const API_URL = this.getApiUrl();
+            const response = await fetch(`${API_URL}/api/leaderboard?limit=100`);
+            
+            if (response.ok) {
+                const result = await response.json();
+                if (result.success && result.leaderboard && result.leaderboard.length > 0) {
+                    console.log('✅ Loaded leaderboard from server:', result.leaderboard.length, 'players');
+                    
+                    // Конвертируем формат сервера в формат клиента
+                    const serverLeaderboard = result.leaderboard.map(score => ({
+                        id: score.telegram_id,
+                        telegramId: score.telegram_id,
+                        name: score.username,
+                        avatar: score.avatar || '👤',
+                        bestScore: score.score,
+                        gamesPlayed: 0,
+                        joinDate: score.created_at || new Date().toISOString()
+                    }));
+                    
+                    // Сохраняем в localStorage как backup
+                    this.saveLeaderboard(serverLeaderboard);
+                    return serverLeaderboard;
+                }
+            }
+        } catch (error) {
+            console.warn('Could not load leaderboard from server, using local:', error.message);
+        }
+        
+        // Fallback to local
+        return this.loadLeaderboard();
+    }
+
     loadLeaderboard() {
         const saved = localStorage.getItem('leaderboard');
         if (saved) {

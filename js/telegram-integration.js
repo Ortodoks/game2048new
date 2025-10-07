@@ -254,6 +254,15 @@ class TelegramIntegration {
         return '👤';
     }
     
+    getApiUrl() {
+        // Определяем URL API сервера
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            return 'http://localhost:3000';
+        }
+        // Для продакшена используем тот же домен
+        return window.location.origin;
+    }
+
     async registerUserOnServer(profile) {
         if (!profile || !profile.telegramId) {
             console.warn('No valid profile to register on server');
@@ -261,10 +270,7 @@ class TelegramIntegration {
         }
 
         try {
-            // Определяем URL сервера
-            const API_URL = window.location.hostname === 'localhost'
-                ? 'http://localhost:3000'
-                : 'https://your-domain.com';
+            const API_URL = this.getApiUrl();
 
             const response = await fetch(`${API_URL}/api/user/register`, {
                 method: 'POST',
@@ -352,9 +358,7 @@ class TelegramIntegration {
 
         try {
             // Upload to backend API
-            const API_URL = window.location.hostname === 'localhost'
-                ? 'http://localhost:3000'
-                : 'https://your-domain.com';
+            const API_URL = this.getApiUrl();
 
             const response = await fetch(`${API_URL}/api/score`, {
                 method: 'POST',
@@ -410,9 +414,56 @@ class TelegramIntegration {
         console.log('Score saved locally, leaderboard updated');
     }
     
-    getLeaderboard() {
-        const scores = JSON.parse(localStorage.getItem('all_scores') || '[]');
-        return scores;
+    getUserProfile() {
+        const saved = localStorage.getItem('telegram_user');
+        if (saved) {
+            return JSON.parse(saved);
+        }
+        return null;
+    }
+
+    async getLeaderboardFromServer(limit = 100) {
+        try {
+            const API_URL = this.getApiUrl();
+            const response = await fetch(`${API_URL}/api/leaderboard?limit=${limit}`);
+            
+            if (response.ok) {
+                const result = await response.json();
+                if (result.success) {
+                    return result.leaderboard;
+                }
+            }
+            
+            // Fallback to local
+            return this.getLeaderboard();
+        } catch (error) {
+            console.error('Error fetching leaderboard from server:', error);
+            return this.getLeaderboard();
+        }
+    }
+
+    async getUserRankFromServer(telegramId) {
+        try {
+            const API_URL = this.getApiUrl();
+            const response = await fetch(`${API_URL}/api/rank/${telegramId}`);
+            
+            if (response.ok) {
+                const result = await response.json();
+                if (result.success) {
+                    return { rank: result.rank, score: result.score };
+                }
+            }
+            
+            // Fallback to local
+            const rank = this.getUserRank();
+            const scores = this.getLeaderboard();
+            const userScore = scores.find(s => s.telegram_id === telegramId);
+            return { rank, score: userScore ? userScore.score : 0 };
+        } catch (error) {
+            console.error('Error fetching rank from server:', error);
+            const rank = this.getUserRank();
+            return { rank, score: 0 };
+        }
     }
     
     getUserRank() {
